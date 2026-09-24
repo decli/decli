@@ -15,10 +15,13 @@ styles/          另外两套备选：terminal/、bento/
 docs/            本说明
 ```
 
-> **仓库名必须是 `decli`，个人主页才会显示它。** GitHub 只认跟用户名一字不差的公开仓库，
-> 读它根目录下的 `README.md`。现在叫 `GitHubHomePage` 的话，主页上什么都不会出现。
-> 改名：仓库 Settings → General → Repository name 改成 `decli` → Rename。
-> 改完 GitHub 会把旧地址自动跳到新地址；README 里的图片全是相对路径，改名不受影响。
+> **个人主页要显示它，得同时满足两件事：**
+>
+> 1. 仓库名跟用户名一字不差（`decli/decli`），而且是公开的。GitHub 只读这个仓库根目录下的 `README.md`。
+> 2. 在仓库首页右侧那块「decli/decli is now a special repository」里点 **Share to Profile**。
+>    只改名不点这一下，主页还是默认样式 —— 这一步很容易漏。
+>
+> README 里的图片全是相对路径，仓库改名、换分支浏览都不受影响。
 
 ---
 
