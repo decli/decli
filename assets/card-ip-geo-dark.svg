@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="250" viewBox="0 0 420 250" role="img" aria-labelledby="title">
+<title id="title">IP 归属地监控 — 工具栏徽标直接显示出口国家代码，IPv4 / IPv6 与归属地一眼可见 —— 代理有没有真的生效，不用再开个测试网站去看。</title>
+<style>text{font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC', 'Noto Sans CJK SC', 'Source Han Sans SC', 'WenQuanYi Zen Hei', Roboto, 'Helvetica Neue', Arial, sans-serif}.mono{font-family:ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, 'JetBrains Mono', 'Liberation Mono', 'DejaVu Sans Mono', monospace}.pulse{animation:pulse 2.4s ease-in-out infinite}@keyframes pulse{50%{opacity:.25}}@media (prefers-reduced-motion:reduce){*{animation:none!important}}</style>
+<defs><clipPath id="frame"><rect width="420" height="250" rx="18"/></clipPath><radialGradient id="glow"><stop offset="0" stop-color="#0ea5e9" stop-opacity="0.35200000000000004"/><stop offset="1" stop-color="#0ea5e9" stop-opacity="0"/></radialGradient></defs>
+<g clip-path="url(#frame)"><rect width="420" height="250" fill="#0c1328"/><ellipse cx="42" cy="0" rx="357" ry="225" fill="url(#glow)"/></g>
+<rect x=".5" y=".5" width="419" height="249" rx="17.5" fill="none" stroke="#96b2f0" stroke-opacity="0.14"/>
+<linearGradient id="tint-ip-geo" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0ea5e9"/><stop offset="1" stop-color="#2563eb"/></linearGradient><rect x="20" y="20" width="44" height="44" rx="12.8" fill="url(#tint-ip-geo)"/><g transform="translate(30.1 30.1) scale(0.990)" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18a15 15 0 0 1 0-18"/></g>
+<text x="77" y="38" font-size="17.5" font-weight="700" fill="#eaf0ff">IP 归属地监控</text>
+<text x="77" y="59" font-size="12.5" fill="#78849f">浏览器扩展</text>
+<text x="20" y="100.0" font-size="14" fill="#a6b3d2">工具栏徽标直接显示出口国家代码，IPv4 / IPv6 与归属地一</text><text x="20" y="122.0" font-size="14" fill="#a6b3d2">眼可见 —— 代理有没有真的生效，不用再开个测试网站去看。</text>
+<rect x="20.0" y="138" width="82.5" height="22" rx="6" fill="#96b2f0" fill-opacity="0.09"/><text x="28.0" y="153.1" font-size="11.5" fill="#a6b3d2">Chrome 扩展</text><rect x="108.5" y="138" width="26.8" height="22" rx="6" fill="#96b2f0" fill-opacity="0.09"/><text x="116.5" y="153.1" font-size="11.5" fill="#a6b3d2">IP</text><rect x="141.3" y="138" width="62.0" height="22" rx="6" fill="#96b2f0" fill-opacity="0.09"/><text x="149.3" y="153.1" font-size="11.5" fill="#a6b3d2">代理排查</text>
+<rect x="20.5" y="200.5" width="70" height="29" rx="9" fill="none" stroke="#96b2f0" stroke-opacity="0.26"/><text x="34" y="219.5" font-size="13" font-weight="700" fill="#a6b3d2">源码 ↗</text>
+</svg>
