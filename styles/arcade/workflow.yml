@@ -1,0 +1,56 @@
+# 人机五子棋：有人开了标题以「五子棋｜」开头的 issue，就落子、让 AI 回一手、重画主页、回复并关掉 issue。
+#
+# 现在放在这里是不生效的（GitHub 只跑 .github/workflows/ 下的文件）。
+# 上线：  python3 styles/arcade/game.py render --home
+#        cp styles/arcade/workflow.yml .github/workflows/arcade.yml
+#
+# 不需要任何密钥：落子、提交、回复用的都是 Action 自带的 GITHUB_TOKEN。
+name: 人机五子棋
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+
+# 同时有两个人落子时排队处理，免得两手同时读到旧棋盘
+concurrency:
+  group: arcade
+  cancel-in-progress: false
+
+jobs:
+  move:
+    if: startsWith(github.event.issue.title, '五子棋｜')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # 标题、用户名一律走环境变量传进脚本，不直接拼进命令行 —— 标题是访客随手写的，拼进去就是注入
+      - name: 落子，AI 回一手，重画棋盘
+        env:
+          TITLE: ${{ github.event.issue.title }}
+          PLAYER: ${{ github.event.issue.user.login }}
+          ISSUE: ${{ github.event.issue.number }}
+        run: python3 styles/arcade/game.py play "$TITLE" "$PLAYER" "$ISSUE" --home > "$RUNNER_TEMP/reply.md"
+
+      - name: 提交
+        env:
+          ISSUE: ${{ github.event.issue.number }}
+        run: |
+          git config user.name "decli-arcade[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet && exit 0
+          git commit -m "arcade: #$ISSUE"
+          git pull --rebase --autostash
+          git push
+
+      - name: 回复并关闭 issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE: ${{ github.event.issue.number }}
+        run: |
+          gh issue comment "$ISSUE" --body-file "$RUNNER_TEMP/reply.md"
+          gh issue close "$ISSUE"

@@ -1,0 +1,44 @@
+# 《零行》每日出刊：每天清晨给主页换一期 —— 期号 +1、封面故事轮到下一件作品、封面画跟着换。
+#
+# 现在放在这里是不生效的（GitHub 只跑 .github/workflows/ 下的文件）。
+# 上线：  把 cover.py 里的 EPOCH 改成上线那天（那天是第 1 期）
+#        python3 styles/editorial/cover.py --home
+#        cp styles/editorial/workflow.yml .github/workflows/editorial.yml
+#
+# 不需要任何密钥。顺带一个好处：GitHub 会停掉 60 天没有动静的仓库里的定时任务，
+# 而这个任务自己每天都在提交，所以它永远不会被停。
+name: 零行 · 每日出刊
+
+on:
+  schedule:
+    - cron: "0 13 * * *" # UTC 13:00 = San Jose 夏令时 6:00、冬令时 5:00
+  workflow_dispatch: # 想提前看下一期，在 Actions 页面手动点一下
+
+permissions:
+  contents: write
+
+concurrency:
+  group: editorial
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # fonttools 用来给每一期封面只嵌当期用到的那几十个字，SVG 从几百 KB 降到几十 KB
+      - run: pip install --quiet fonttools brotli
+
+      - name: 出一期
+        run: python3 styles/editorial/cover.py --home
+
+      - name: 提交
+        run: |
+          git config user.name "decli-editorial[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet && exit 0
+          git commit -m "零行：$(date -u +%F) 出刊"
+          git pull --rebase --autostash
+          git push

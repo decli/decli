@@ -1,0 +1,44 @@
+# AI 分身：有人通过主页底部的输入框开了「问 decli 的 AI 分身」issue，就读作品资料、写一条回复贴回去。
+#
+# 现在放在这里是不生效的（GitHub 只跑 .github/workflows/ 下的文件）。
+# 上线：  python3 styles/chat/chat.py --home
+#        cp styles/chat/workflow.yml .github/workflows/chat.yml
+#        仓库 Settings → Secrets and variables → Actions 里加 LLM_API_KEY（和 codeless 用的是同一把）
+#        可选：LLM_BASE_URL、LLM_MODEL；不配就是 DeepSeek。
+# 没配 LLM_API_KEY 也能跑：只是回一段固定的话，告诉对方 decli 会亲自看。
+#
+# issue 不关：留着就是一条条真实的对话，decli 可以在下面接着回。
+name: AI 分身
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  issues: write
+
+jobs:
+  reply:
+    if: startsWith(github.event.issue.title, '问 decli')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # 标题和正文是访客写的，一律走环境变量，不拼进命令行
+      - name: 写回复
+        env:
+          TITLE: ${{ github.event.issue.title }}
+          BODY: ${{ github.event.issue.body }}
+          LOGIN: ${{ github.event.issue.user.login }}
+          ISSUE: ${{ github.event.issue.number }}
+          GITHUB_TOKEN: ${{ github.token }}
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+          LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
+          LLM_MODEL: ${{ secrets.LLM_MODEL }}
+        run: python3 styles/chat/ask.py "$ISSUE" "$LOGIN" > "$RUNNER_TEMP/reply.md"
+
+      - name: 贴回 issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE: ${{ github.event.issue.number }}
+        run: gh issue comment "$ISSUE" --body-file "$RUNNER_TEMP/reply.md"
