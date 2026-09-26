@@ -192,15 +192,27 @@ def cover(mode, day):
     p.append(f'<defs><clipPath id="art"><rect x="{ax}" y="{ay}" width="{aw}" height="{ah}"/></clipPath></defs>'
              f'<g clip-path="url(#art)">{art(rng, w["tint"][0], w["tint"][1], t, ax, ay, aw, ah)}</g>')
     p.append(B.icon(w, ax + aw - 84, ay + ah - 84, 64, dict(panel=t["bg"], line=t["ink"], line_op=.15)))
-    # 导读
+    # 导读：夜刊的几条更长、折行更多，条与条之间的间距按剩下的空间收一收，别撞到下面的「封面故事」
+    blocks = [(label, B.wrap(line, 22, 268)) for label, line in TEASERS[mode]]
+
+    def last_rule(step):
+        ty = 392
+        for _, ls in blocks:
+            last = ty + 34 + (len(ls) - 1) * 31
+            ty = last + step
+        return last + step * .36
+
+    step = 62
+    while step > 36 and last_rule(step) > 812:
+        step -= 1
     ty = 392
-    for label, line in TEASERS[mode]:
+    for label, ls in blocks:
         p.append(txt(40, ty, label, 14, t["accent"], extra=' letter-spacing="3" font-weight="700"'))
-        for k, ln in enumerate(B.wrap(line, 22, 268)):
+        for k, ln in enumerate(ls):
             p.append(txt(40, ty + 34 + k * 31, ln, 22, t["ink"]))
-            last = ty + 34 + k * 31
-        p.append(f'<rect x="40" y="{last + 22}" width="36" height="2" fill="{t["ink"]}"/>')
-        ty = last + 62
+        last = ty + 34 + (len(ls) - 1) * 31
+        p.append(f'<rect x="40" y="{last + step * .36:.1f}" width="36" height="2" fill="{t["ink"]}"/>')
+        ty = last + step
     # 封面故事
     p.append(txt(40, 852, f"封面故事 · {dict(B.CATS)[w['cat']]}", 15, t["accent"], extra=' letter-spacing="2" font-weight="700"'))
     fs = min(118, 760 / (B.tw(w["name"], 1, True) or 1))
