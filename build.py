@@ -170,7 +170,7 @@ WORKS = [
     ),
     dict(
         slug="chinesechess", cat="app", name="中国象棋-老人版", repo="chinesechess03",
-        icon="chess", tint=("#a16207", "#854d0e"), who="给老爸",
+        icon="chess", tint=("#a16207", "#854d0e"), who="给老人",
         desc="Android 平板上的中国象棋，按 14 寸横屏放大过布局，三档 AI，落子有音效和语音播报。",
         brief="按 14 寸平板放大布局的中国象棋，三档 AI，落子有语音播报。",
         tags=["Android", "象棋", "大屏"],
