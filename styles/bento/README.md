@@ -24,6 +24,6 @@
 | **Bing 壁纸批量下载**<br><sub>用户脚本</sub> | 勾选多张壁纸，一次批量下载 4K 原图。 | [源码](https://github.com/decli/BingWDByte4KBatchDownloader) |
 | **MacPleco**<br><sub>桌面应用</sub> | 不制造焦虑的 Mac 清理工具，删什么都先进废纸篓。 | [下载](https://github.com/decli/MacPleco/releases/latest) · [源码](https://github.com/decli/MacPleco) |
 | **取件码助手**<br><sub>移动应用</sub> | 从短信里挑出还没取的取件码，像取件小票一样大字摆出来。 | [源码](https://github.com/decli/CodeHelper) |
-| **老爸下象棋**<br><sub>移动应用</sub> | 按 14 寸平板放大布局的中国象棋，三档 AI，落子有语音播报。 | [源码](https://github.com/decli/chinesechess03) |
+| **中国象棋-老人版**<br><sub>移动应用</sub> | 按 14 寸平板放大布局的中国象棋，三档 AI，落子有语音播报。 | [源码](https://github.com/decli/chinesechess03) |
 
 </details>

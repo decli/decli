@@ -74,7 +74,7 @@ codeless 的实测里就抓到过一次：AI 为了让检查变绿，偷偷新�
 <picture><source media="(prefers-color-scheme: dark)" srcset="assets/msg-06-dark.svg"><img alt="三个。给幼儿园大班孩子的思维小画本，给家里老人的取件码助手，还有给老爸的象棋 —— 按 14 寸平板放大过，字大、子大。" src="assets/msg-06-light.svg" width="551.0"></picture>
 
 <img src="assets/spacer.svg" width="48" height="1" alt=""><a href="https://decli.github.io/logicc/"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/card-logicc-dark.svg"><img alt="思维小画本 —— 把做不下去的纸质练习册，改成十二个会读题的平板游戏。" src="assets/card-logicc-light.svg" width="300"></picture></a> <a href="https://github.com/decli/CodeHelper"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/card-codehelper-dark.svg"><img alt="取件码助手 —— 从短信里挑出还没取的取件码，像取件小票一样大字摆出来。" src="assets/card-codehelper-light.svg" width="300"></picture></a><br>
-<img src="assets/spacer.svg" width="48" height="1" alt=""><a href="https://github.com/decli/chinesechess03"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/card-chinesechess-dark.svg"><img alt="老爸下象棋 —— 按 14 寸平板放大布局的中国象棋，三档 AI，落子有语音播报。" src="assets/card-chinesechess-light.svg" width="300"></picture></a>
+<img src="assets/spacer.svg" width="48" height="1" alt=""><a href="https://github.com/decli/chinesechess03"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/card-chinesechess-dark.svg"><img alt="中国象棋-老人版 —— 按 14 寸平板放大布局的中国象棋，三档 AI，落子有语音播报。" src="assets/card-chinesechess-light.svg" width="300"></picture></a>
 
 </div>
 
@@ -107,7 +107,7 @@ codeless 的实测里就抓到过一次：AI 为了让检查变绿，偷偷新�
 | **Bing 壁纸批量下载**<br><sub>用户脚本</sub> | 勾选多张壁纸，一次批量下载 4K 原图。 | [源码](https://github.com/decli/BingWDByte4KBatchDownloader) |
 | **MacPleco**<br><sub>桌面应用</sub> | 不制造焦虑的 Mac 清理工具，删什么都先进废纸篓。 | [下载](https://github.com/decli/MacPleco/releases/latest) · [源码](https://github.com/decli/MacPleco) |
 | **取件码助手**<br><sub>移动应用</sub> | 从短信里挑出还没取的取件码，像取件小票一样大字摆出来。 | [源码](https://github.com/decli/CodeHelper) |
-| **老爸下象棋**<br><sub>移动应用</sub> | 按 14 寸平板放大布局的中国象棋，三档 AI，落子有语音播报。 | [源码](https://github.com/decli/chinesechess03) |
+| **中国象棋-老人版**<br><sub>移动应用</sub> | 按 14 寸平板放大布局的中国象棋，三档 AI，落子有语音播报。 | [源码](https://github.com/decli/chinesechess03) |
 
 
 

@@ -1,10 +1,10 @@
 <!-- 这个文件由 styles/editorial/cover.py 生成。改内容请改 styles/editorial/cover.py 里的数据，再跑 python3 styles/editorial/cover.py -->
 
-<a href="https://decli.github.io"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cover-dark-802c3849.svg"><img alt="《零行》日刊 第 1 期，2026 年 9 月 26 日。封面故事：老爸下象棋 —— 按 14 寸平板放大布局的中国象棋，三档 AI，落子有语音播报。 导读：特稿：十五个作品，一行代码没写；实测：一句话做一个网站，花了 $0.0127；家事：给老爸的象棋，为什么要放大到 14 寸；方法：人出判断，AI 出产能" src="assets/cover-light-f7a1df4f.svg" width="100%"></picture></a>
+<a href="https://decli.github.io"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cover-dark-6e43e889.svg"><img alt="《零行》日刊 第 1 期，2026 年 9 月 26 日。封面故事：中国象棋-老人版 —— 按 14 寸平板放大布局的中国象棋，三档 AI，落子有语音播报。 导读：特稿：十五个作品，一行代码没写；实测：一句话做一个网站，花了 $0.0127；家事：给老爸的象棋，为什么要放大到 14 寸；方法：人出判断，AI 出产能" src="assets/cover-light-15bd8d88.svg" width="100%"></picture></a>
 
 <p align="center"><sub>《零行》第 1 期 · 每天清晨六点（San Jose）自动出刊 · 切换 GitHub 的明暗主题，拿到的是日刊或夜刊</sub></p>
 
-## 封面故事 · 老爸下象棋
+## 封面故事 · 中国象棋-老人版
 
 > 按 14 寸平板放大布局的中国象棋，三档 AI，落子有语音播报。
 
@@ -52,7 +52,7 @@ flowchart LR
 | **Bing 壁纸批量下载**<br><sub>用户脚本</sub> | 勾选多张壁纸，一次批量下载 4K 原图。 | [源码](https://github.com/decli/BingWDByte4KBatchDownloader) |
 | **MacPleco**<br><sub>桌面应用</sub> | 不制造焦虑的 Mac 清理工具，删什么都先进废纸篓。 | [下载](https://github.com/decli/MacPleco/releases/latest) · [源码](https://github.com/decli/MacPleco) |
 | **取件码助手**<br><sub>移动应用</sub> | 从短信里挑出还没取的取件码，像取件小票一样大字摆出来。 | [源码](https://github.com/decli/CodeHelper) |
-| **老爸下象棋**<br><sub>移动应用</sub> | 按 14 寸平板放大布局的中国象棋，三档 AI，落子有语音播报。 | [源码](https://github.com/decli/chinesechess03) |
+| **中国象棋-老人版**<br><sub>移动应用</sub> | 按 14 寸平板放大布局的中国象棋，三档 AI，落子有语音播报。 | [源码](https://github.com/decli/chinesechess03) |
 
 </details>
 
