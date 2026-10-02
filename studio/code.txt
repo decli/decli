@@ -1,0 +1,400 @@
+from __future__ import annotations
+from .llm import LLM, assistant_to_dict
+from .tools import TOOL_SCHEMAS, ToolBox
+class TurnLimitExceeded(RuntimeError):
+    pass
+class CodingAgent:
+    def __init__(self, llm: LLM, toolbox: ToolBox, system: str, ui) -> None:
+        self.llm = llm
+        self.toolbox = toolbox
+        self.ui = ui
+        self.messages: list[dict] = [{"role": "system", "content": system}]
+        self.turns = 0
+    def send(self, user_text: str) -> str:
+        self.turns = 0
+        self.messages.append({"role": "user", "content": user_text})
+        while True:
+            if self.turns >= self.llm.settings.max_turns:
+            self.turns += 1
+            msg = self.llm.chat(self.messages, TOOL_SCHEMAS, on_delta=self.ui.delta)
+            self.ui.flush()
+            self.messages.append(assistant_to_dict(msg))
+            if not msg.tool_calls:
+                return msg.content.strip()
+            for call in msg.tool_calls:
+                self.ui.tool(call.name, call.arguments)
+                result = self.toolbox.dispatch(call.name, call.arguments)
+                self.ui.tool_result(call.name, result)
+                self.messages.append(
+                    {"role": "tool", "tool_call_id": call.id, "content": result}
+                )
+from __future__ import annotations
+import json
+from pathlib import Path
+from .sandbox import Sandbox
+MAX_READ_CHARS = 40_000
+TOOL_SCHEMAS = [
+    {
+        "type": "function",
+        "function": {
+            "name": "list_files",
+            "parameters": {
+                "type": "object",
+                "required": [],
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "read_file",
+            "parameters": {
+                "type": "object",
+                "required": ["path"],
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "write_file",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                },
+                "required": ["path", "content"],
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "run",
+            "parameters": {
+                "type": "object",
+                "required": ["cmd"],
+            },
+        },
+    },
+]
+SKIP_DIRS = {".git", "__pycache__", ".pytest_cache", ".ruff_cache", "dist", ".venv"}
+class ToolBox:
+    def __init__(
+        self,
+        workspace: Path,
+        sandbox: Sandbox,
+        locked: tuple[str, ...] = (),
+        max_output: int = 6000,
+        cmd_timeout: int = 120,
+    ) -> None:
+        self.workspace = workspace.resolve()
+        self.sandbox = sandbox
+        self.locked = locked
+        self.max_output = max_output
+        self.cmd_timeout = cmd_timeout
+        self.commands: list[tuple[str, int]] = []
+    def _safe(self, rel: str) -> Path:
+        target = (self.workspace / rel).resolve()
+        if target != self.workspace and self.workspace not in target.parents:
+        return target
+    def _is_locked(self, rel: str) -> bool:
+        norm = rel.replace("\\", "/").lstrip("./")
+        return any(norm == p.rstrip("/") or norm.startswith(p) for p in self.locked)
+    def _truncate(self, text: str) -> str:
+        if len(text) <= self.max_output:
+            return text
+        half = self.max_output // 2
+    def list_files(self, path: str = ".") -> str:
+        base = self._safe(path)
+        if not base.exists():
+        lines = []
+        for p in sorted(base.rglob("*")):
+            if any(part in SKIP_DIRS for part in p.parts):
+                continue
+            if p.is_file():
+                lines.append(f"{p.relative_to(self.workspace)}  ({p.stat().st_size} B)")
+    def read_file(self, path: str) -> str:
+        target = self._safe(path)
+        if not target.is_file():
+        text = target.read_text(encoding="utf-8", errors="replace")
+        if len(text) > MAX_READ_CHARS:
+        return text
+    def write_file(self, path: str, content: str) -> str:
+        if self._is_locked(path):
+            return (
+            )
+        target = self._safe(path)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(content, encoding="utf-8")
+    def run(self, cmd: str) -> str:
+        code, out = self.sandbox.exec(cmd, timeout=self.cmd_timeout)
+        self.commands.append((cmd, code))
+        return f"[exit={code}]\n{self._truncate(out.strip())}"
+    def dispatch(self, name: str, arguments: str) -> str:
+        try:
+            args = json.loads(arguments or "{}")
+        except json.JSONDecodeError as exc:
+        try:
+            if name == "list_files":
+                return self.list_files(args.get("path", "."))
+            if name == "read_file":
+                return self.read_file(args["path"])
+            if name == "write_file":
+                return self.write_file(args["path"], args.get("content", ""))
+            if name == "run":
+                return self.run(args["cmd"])
+        except KeyError as exc:
+from __future__ import annotations
+import subprocess
+from dataclasses import dataclass
+from pathlib import Path
+class DockerUnavailable(RuntimeError):
+    pass
+def ensure_daemon() -> str:
+    proc = subprocess.run(
+        ["docker", "info", "--format", "{{.ServerVersion}}"], capture_output=True, text=True
+    )
+    if proc.returncode != 0:
+    return proc.stdout.strip()
+def image_exists(image: str) -> bool:
+    proc = subprocess.run(["docker", "image", "inspect", image], capture_output=True, text=True)
+    return proc.returncode == 0
+@dataclass
+class Sandbox:
+    name: str
+    workspace: Path
+    image: str
+    network: str = "none"
+    memory: str = "2g"
+    cpus: str = "2"
+    mount_source: Path | None = None
+    def start(self) -> Sandbox:
+        ensure_daemon()
+        if not image_exists(self.image):
+            raise DockerUnavailable(
+            )
+        subprocess.run(["docker", "rm", "-f", self.name], capture_output=True, text=True)
+        proc = subprocess.run(
+            [
+                "docker", "run", "-d",
+                "--name", self.name,
+                "--network", self.network,
+                "--memory", self.memory,
+                "--cpus", self.cpus,
+                "--pids-limit", "512",
+                "-v", f"{self.mount_source or self.workspace}:/workspace",
+                "-w", "/workspace",
+                self.image, "sleep", "infinity",
+            ],
+            capture_output=True, text=True,
+        )
+        if proc.returncode != 0:
+        return self
+    def exec(self, cmd: str, timeout: int = 120) -> tuple[int, str]:
+        try:
+            proc = subprocess.run(
+                ["docker", "exec", "-w", "/workspace", self.name, "sh", "-c", cmd],
+                capture_output=True, text=True, timeout=timeout,
+            )
+        except subprocess.TimeoutExpired:
+        return proc.returncode, (proc.stdout or "") + (proc.stderr or "")
+    def stop(self) -> None:
+        subprocess.run(["docker", "rm", "-f", self.name], capture_output=True, text=True)
+    def __enter__(self) -> Sandbox:
+        return self.start()
+    def __exit__(self, *exc: object) -> None:
+        self.stop()
+from __future__ import annotations
+import time
+from dataclasses import dataclass, field
+from typing import Any, Callable
+from openai import OpenAI
+from .config import Settings, price_table
+class BudgetExceeded(RuntimeError):
+    pass
+@dataclass
+class ToolCall:
+    id: str
+    name: str
+    arguments: str
+@dataclass
+class AssistantMessage:
+    content: str = ""
+    reasoning: str = ""
+    tool_calls: list[ToolCall] = field(default_factory=list)
+@dataclass
+class Usage:
+    calls: int = 0
+    cache_hit: int = 0
+    cache_miss: int = 0
+    output: int = 0
+    estimated: bool = False
+    def add(self, raw: Any) -> None:
+        if raw is None:
+            return
+        prompt = getattr(raw, "prompt_tokens", 0) or 0
+        hit = getattr(raw, "prompt_cache_hit_tokens", None)
+        miss = getattr(raw, "prompt_cache_miss_tokens", None)
+        if hit is None and miss is None:
+            hit, miss = 0, prompt
+        elif hit is None:
+            hit = max(prompt - (miss or 0), 0)
+        elif miss is None:
+            miss = max(prompt - hit, 0)
+        self.cache_hit += hit
+        self.cache_miss += miss
+        self.output += getattr(raw, "completion_tokens", 0) or 0
+    def add_estimate(self, sent_chars: int, got_chars: int) -> None:
+        self.estimated = True
+        self.cache_miss += sent_chars // 3
+        self.output += got_chars // 3
+    @property
+    def usd(self) -> float:
+        p = price_table()
+        total = (
+            self.cache_hit * p["cache_hit"]
+            + self.cache_miss * p["cache_miss"]
+            + self.output * p["output"]
+        )
+        return total / 1_000_000
+    def summary(self) -> str:
+        return (
+        )
+class LLM:
+    def __init__(self, settings: Settings) -> None:
+        self.settings = settings
+        self.client = OpenAI(api_key=settings.api_key, base_url=settings.base_url, timeout=600)
+        self.usage = Usage()
+    def check_budget(self) -> None:
+        if self.usage.usd >= self.settings.max_usd:
+            raise BudgetExceeded(
+            )
+    def chat(
+        self,
+        messages: list[dict],
+        tools: list[dict] | None = None,
+        on_delta: Callable[[str, str], None] | None = None,
+    ) -> AssistantMessage:
+        self.check_budget()
+        last: Exception | None = None
+        for attempt in range(3):
+            started = False
+            try:
+                kwargs: dict[str, Any] = {
+                    "model": self.settings.model,
+                    "messages": messages,
+                    "stream": True,
+                    "stream_options": {"include_usage": True},
+                }
+                if tools:
+                    kwargs["tools"] = tools
+                    kwargs["tool_choice"] = "auto"
+                msg = AssistantMessage()
+                calls: dict[int, dict] = {}
+                got_usage = False
+                for chunk in self.client.chat.completions.create(**kwargs):
+                    if getattr(chunk, "usage", None):
+                        self.usage.add(chunk.usage)
+                        got_usage = True
+                    for choice in chunk.choices or []:
+                        delta = getattr(choice, "delta", None)
+                        if delta is None:
+                            continue
+                        reasoning = getattr(delta, "reasoning_content", None)
+                        if reasoning:
+                            started = True
+                            msg.reasoning += reasoning
+                            if on_delta:
+                                on_delta("thinking", reasoning)
+                        if delta.content:
+                            started = True
+                            msg.content += delta.content
+                            if on_delta:
+                                on_delta("say", delta.content)
+                        for tc in delta.tool_calls or []:
+                            slot = calls.setdefault(
+                                tc.index, {"id": "", "name": "", "arguments": ""}
+                            )
+                            started = True
+                            if tc.id:
+                                slot["id"] = tc.id
+                            if tc.function and tc.function.name:
+                                slot["name"] += tc.function.name
+                            if tc.function and tc.function.arguments:
+                                slot["arguments"] += tc.function.arguments
+                self.usage.calls += 1
+                if not got_usage:
+                    sent = sum(len(str(m.get("content") or "")) for m in messages)
+                    self.usage.add_estimate(sent, len(msg.content) + len(msg.reasoning))
+                msg.tool_calls = [ToolCall(**calls[i]) for i in sorted(calls)]
+                return msg
+                last = exc
+                if started or attempt == 2:
+                    break
+                time.sleep(2**attempt)
+def assistant_to_dict(msg: AssistantMessage) -> dict:
+    out: dict[str, Any] = {"role": "assistant", "content": msg.content or ""}
+    if msg.tool_calls:
+        out["tool_calls"] = [
+            {
+                "id": call.id,
+                "type": "function",
+                "function": {"name": call.name, "arguments": call.arguments},
+            }
+            for call in msg.tool_calls
+        ]
+    return out
+from __future__ import annotations
+import hashlib
+import json
+import re
+import shutil
+import subprocess
+import unicodedata
+from dataclasses import dataclass, field
+from datetime import datetime
+from pathlib import Path
+from .config import Settings
+from .llm import LLM, BudgetExceeded
+from .loop import CodingAgent, TurnLimitExceeded
+from .sandbox import Sandbox
+from .templates import TEMPLATES, TemplateSpec
+from .tools import ToolBox
+CONFIG_TRAPS = {
+    "ruff.toml", ".ruff.toml", "setup.cfg", "tox.ini", "pytest.ini", ".editorconfig",
+    "conftest.py",
+}
+CONFTEST_ALLOWED_PREFIX = "tests/unit/"
+{history}
+{requirement}
+```python
+{tests}
+```
+def slugify(text: str, limit: int = 28) -> str:
+    text = unicodedata.normalize("NFKD", text)
+    ascii_only = re.sub(r"[^a-zA-Z0-9]+", "-", text).strip("-").lower()
+    return (ascii_only or "site")[:limit].strip("-") or "site"
+def extract_code(text: str) -> str:
+    match = re.search(r"```(?:python)?\s*\n(.*?)```", text, re.S)
+    return (match.group(1) if match else text).strip() + "\n"
+def git(workspace: Path, *args: str, check: bool = True) -> subprocess.CompletedProcess:
+    cmd = [
+        "git", "-C", str(workspace),
+        "-c", "user.name=codeless agent",
+        "-c", "user.email=agent@codeless.local",
+        *args,
+    ]
+    proc = subprocess.run(cmd, capture_output=True, text=True)
+    if check and proc.returncode != 0:
+    return proc
+def sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+@dataclass
+class TaskResult:
+    ok: bool
+    workspace: Path
+    rounds: int = 0
+    checks: dict[str, bool] = field(default_factory=dict)
+    usage: str = ""
+    usd: float = 0.0
+    blocked: str | None = None

@@ -2,6 +2,18 @@
 
 主页现在用的是根目录那套「极光」。这里放着几套备选，每一套都能直接点进去看完整效果。
 
+## 第二代：两套完整的新主页 → 挑一套
+
+| [零 · 灰与橙](zero/) | [极光 Pro](aurora-pro/) |
+| --- | --- |
+| <a href="zero/"><img alt="零 · 灰与橙" src="zero/assets/hero-d-light.svg" width="100%"></a> | <a href="aurora-pro/"><img alt="极光 Pro" src="aurora-pro/assets/hero-d-dark.svg" width="100%"></a> |
+| 灰色的代码是 AI 的产能，橙色是我的判断。首屏是 codeless 里 AI 写的真代码，按整字挖出一个「0」 | 作品集同一套品牌，工艺拉满。首屏一整片夜空，分隔线过了文字升起来变成极光的底边 |
+
+两套用同一份数据、同一批真截图，桌面 / 手机 × 亮 / 暗各排一版。生成器和排版规矩在 [`studio/`](../studio/)，
+选定了就一行：`python3 studio/build.py --home zero`（或 `--home aurora-pro`），README 和图生成到仓库根目录。
+
+## 第一代
+
 前两套（[终端](terminal/)、[便当格](bento/)）只是换了视觉。下面三套换的是**人和主页怎么互动**：
 
 | | 街机 · 人机对弈 | 对话 · AI 分身 | 刊物 · 零行 |

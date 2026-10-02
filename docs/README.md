@@ -11,7 +11,8 @@ README.md        个人主页（极光风格）—— build.py 生成，别手�
 assets/          README 里用到的 SVG，亮暗各一份
 build.py         生成器：作品数据、配色、三套风格的画法都在这一个文件里
 src/icons/       从各项目借来的图标
-styles/          另外两套备选：terminal/、bento/
+styles/          备选风格：terminal/、bento/、arcade/、chat/、editorial/，以及第二代的 zero/、aurora-pro/
+studio/          第二代主页的生成器（零 · 灰与橙 / 极光 Pro）：python3 studio/build.py --home <风格>
 docs/            本说明
 ```
 
