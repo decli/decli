@@ -2,12 +2,14 @@
 """
 decli 的 GitHub 个人主页 —— 生成器。
 
-    python3 build.py              三套全部重新生成
+    python3 build.py              第一代三套全部重新生成
     python3 build.py aurora       只生成其中一套（aurora / terminal / bento）
 
-生成到哪：HOME_STYLE 指定的那一套生成到仓库根目录（README.md + assets/），
-那就是个人主页上显示的；另外两套生成到 styles/<名字>/ 备用。
-想换风格，改 HOME_STYLE 再跑一次就行。
+个人主页现在用的是第二代的「零 · 灰与橙」，由 studio/build.py 生成到仓库根目录。
+所以 HOME_STYLE 是 None：这里的三套都只生成到 styles/<名字>/ 备用，不碰根目录。
+想把第一代的某一套换回主页，把 HOME_STYLE 改成它的名字再跑一次。
+
+这个文件同时是两代共用的作品数据（WORKS / POC / PRINCIPLES …），studio/ 也从这里读。
 
 加一个作品：只改下面的 WORKS。卡片、表格、首屏数字全跟着数据走。
 只用标准库，不装任何东西。
@@ -38,7 +40,7 @@ import shutil
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parent
-HOME_STYLE = "aurora"  # 个人主页用哪一套：aurora / terminal / bento
+HOME_STYLE = None  # 主页由 studio/build.py 生成（零 · 灰与橙）；第一代的 aurora / terminal / bento 都只放 styles/ 下
 SITE = "https://decli.github.io"
 GH = "https://github.com/decli"
 

@@ -1118,7 +1118,7 @@ def build(out: pathlib.Path, prefix="assets/"):
     kit.save_seg()
 
     P = lambda *a, **k: kit.picture(*a, prefix=prefix, **k)  # noqa: E731
-    md = ["<!-- 由 studio/zero.py 生成，别手改。改文案改 build.py 的数据，再跑 python3 studio/build.py -->", ""]
+    md = ["<!-- 由 studio/zero.py 生成，别手改。改文案改 build.py 的数据，再跑 python3 studio/build.py --home zero -->", ""]
     md.append(P("hero", f"decli — {C.HEAD_A}{C.HEAD_B}" + "".join(C.LEDE), "100%", C.SITE))
     md += ["", P("method", "方法：人出判断，AI 出产能。我只做三件事：提出问题、选择方案、验收结果；"
                            "其余的 —— UI 交互设计、写代码、跑测试、修 bug、部署上线 —— 全部交给 AI。", "100%")]

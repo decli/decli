@@ -1,7 +1,7 @@
 # studio —— 两套新主页
 
 这里是第二代个人主页的生成器。两套方向共用一份数据（根目录 `build.py` 里的 `WORKS` / `POC` / `PRINCIPLES`）、
-一套排版工具，各自出一整页 README：
+一套排版工具，各自出一整页 README。个人主页现在用的是「零」：
 
 | | 零 · 灰与橙（`zero.py`） | 极光 Pro（`aurora_pro.py`） |
 | --- | --- | --- |

@@ -1,4 +1,4 @@
-<!-- 由 studio/zero.py 生成，别手改。改文案改 build.py 的数据，再跑 python3 studio/build.py -->
+<!-- 由 studio/zero.py 生成，别手改。改文案改 build.py 的数据，再跑 python3 studio/build.py --home zero -->
 
 <a href="https://decli.github.io"><picture><source media="(max-width: 1151px) and (prefers-color-scheme: dark)" srcset="assets/hero-m-dark.svg"><source media="(max-width: 1151px)" srcset="assets/hero-m-light.svg"><source media="(prefers-color-scheme: dark)" srcset="assets/hero-d-dark.svg"><img alt="decli — 十五个作品，一行代码没写。从 UI 交互设计到每一行代码编写，全部由 AI 完成。我只做三件事：提出问题、选择方案、验收结果——人出判断，AI 出产能。不是尝鲜，这是 AI Native 时代工作新范式。" src="assets/hero-d-light.svg" width="100%"></picture></a>
 

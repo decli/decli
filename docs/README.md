@@ -2,17 +2,17 @@
 
 <https://github.com/decli> 个人主页上显示的那份 README，以及生成它的代码。
 
-视觉语言取自作品集 <https://decli.github.io/>：配色是把首页亮暗两套 CSS 变量原样搬过来的，
-首屏那句「十五个作品，一行代码没写」一字没改，作品图标也是从各项目借来的 favicon。
-GitHub 上和作品集里，看起来是同一个人的东西。
+现在主页上的是第二代的 **零 · 灰与橙**：灰色是 AI 的产能（AI 写的真代码、去了色的真截图），
+橙色是我的判断（那个 0、三个判断点、我对 codeless 说的那句话、每件作品替谁解决什么）。
+首屏那句「十五个作品，一行代码没写」跟作品集 <https://decli.github.io/> 一字不差。
 
 ```
-README.md        个人主页（极光风格）—— build.py 生成，别手改
-assets/          README 里用到的 SVG，亮暗各一份
-build.py         生成器：作品数据、配色、三套风格的画法都在这一个文件里
+README.md        个人主页（零 · 灰与橙）—— studio/build.py --home zero 生成，别手改
+assets/          README 里用到的 SVG：桌面 / 手机 × 亮 / 暗，每张四份
+build.py         作品数据（WORKS / POC / PRINCIPLES …，两代共用）+ 第一代三套风格的画法
+studio/          第二代生成器：零 · 灰与橙 / 极光 Pro，排版规矩写在 studio/README.md
 src/icons/       从各项目借来的图标
-styles/          备选风格：terminal/、bento/、arcade/、chat/、editorial/，以及第二代的 zero/、aurora-pro/
-studio/          第二代主页的生成器（零 · 灰与橙 / 极光 Pro）：python3 studio/build.py --home <风格>
+styles/          备选：第二代 zero/、aurora-pro/；第一代 aurora/、terminal/、bento/、arcade/、chat/、editorial/
 docs/            本说明
 ```
 
@@ -28,24 +28,38 @@ docs/            本说明
 
 ## 加一个作品
 
-只改 [`build.py`](../build.py) 里的 `WORKS`，然后：
+改 [`build.py`](../build.py) 里的 `WORKS`，再在 [`studio/zero.py`](../studio/zero.py) 的 `ORDER` 里给它排个位置
+（漏了 build 会直接报错提醒），然后：
 
 ```sh
-python3 build.py            # 三套全生成
-python3 build.py aurora     # 只生成一套
+pip install fonttools brotli pillow   # 第一次
+python3 studio/build.py --home zero   # 主页 + styles/ 下两套第二代
+python3 build.py                      # 第一代三套（只在 styles/ 下）
 ```
 
-卡片、作品表、首屏的「十五个作品」和「15 / 4 / 0」全跟着数据走。只用标准库，不用装任何东西。
-极光风格里哪几个作品上卡片、怎么分组，在 `AURORA_SECTIONS` 里改。
+首屏的「十五个作品」「15 / 4 / 6」、全部作品表都跟着数据走。想让它上大图（精选六件），
+改 `zero.py` 的 `FEATURED`，再在 [`studio/content.py`](../studio/content.py) 的 `SHOT` 里给它定一块截图。
+文案里出现母版字体里没有的字，build 会报错，按提示带上原始字体重切一次母版。
 
 ## 换一套风格
 
-改 `build.py` 顶上的 `HOME_STYLE`（`aurora` / `terminal` / `bento`），再跑一次 `python3 build.py`。
-选中的那套生成到根目录，另外两套挪到 `styles/` 下。
+第二代两套：`python3 studio/build.py --home zero` 或 `--home aurora-pro`，选中的那套生成到根目录。
+对比见 [`styles/README.md`](../styles/README.md)。
 
-### 极光 Aurora（正在用）
+第一代的想换回主页：把 `build.py` 顶上的 `HOME_STYLE` 从 `None` 改成 `aurora` / `terminal` / `bento`，
+再跑 `python3 build.py`。平时它是 `None`，只往 `styles/` 下写，不会盖掉根目录的主页。
 
-<a href="../"><picture><source media="(prefers-color-scheme: dark)" srcset="../assets/hero-dark.svg"><img alt="极光风格首屏" src="../assets/hero-light.svg" width="100%"></picture></a>
+### 零 · 灰与橙（正在用）
+
+<a href="../"><picture><source media="(prefers-color-scheme: dark)" srcset="../assets/hero-d-dark.svg"><img alt="零 · 灰与橙首屏" src="../assets/hero-d-light.svg" width="100%"></picture></a>
+
+铺满一屏 codeless 仓库里 AI 写的真代码，按整字挖出一个「0」—— 只挖笔画那一圈，0 里照样是代码，
+正中一个从不打字的光标。往下是方法（人只在三个点上做判断）、codeless 的一次实测（$0.0127）、
+六件精选作品的真截图、全部十五件的索引、我相信的两件事、版权页。
+
+### 极光 Aurora（第一代，在 [`styles/aurora/`](../styles/aurora/)）
+
+<a href="../styles/aurora/"><picture><source media="(prefers-color-scheme: dark)" srcset="../styles/aurora/assets/hero-dark.svg"><img alt="极光风格首屏" src="../styles/aurora/assets/hero-light.svg" width="100%"></picture></a>
 
 跟作品集首页同源：深海军蓝底，三团缓慢漂浮的紫、青色斑，几条风线，渐变标题，玻璃卡片。
 作品按「替谁做的」分组：外贸生意、顺手的小工具、给身边的人。codeless 单独一张横幅，
@@ -86,7 +100,10 @@ python3 build.py aurora     # 只生成一套
 
 ---
 
-## 几个不显眼但重要的地方
+## 几个不显眼但重要的地方（第一代）
+
+第二代换了做法：字体按页切子集嵌进 SVG、字宽按字体文件量出来、手机单独排一版 ——
+下面「字宽只能估」「手机上字偏小」那些限制在第二代里都不存在了，细节见 [`studio/README.md`](../studio/README.md)。
 
 **为什么全是 SVG。** GitHub 渲染 README 时会剥掉 `<style>`、`class`、`style` 属性和所有脚本，
 能留下来的只有图片和少数几个标签。但 SVG 当图片用的时候，它内部的 CSS 动画照样跑 ——
