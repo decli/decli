@@ -2,13 +2,13 @@
 
 <https://github.com/decli> 个人主页上显示的那份 README，以及生成它的代码。
 
-现在主页上的是第二代的 **长卷**：一卷从右往左看的山水。山是 AI 写下的代码 ——
-近处的山就是画出那张截图的源文件，竖排着灌进山形里；远山的轮廓是十五个仓库全部八万多行代码的行长。
-卷上的朱印是我盖的：一件作品一方，验过了才盖。AI 出产能、人出判断，换成这个媒介，正好是一卷画和画上的印。
-首屏那句「一行代码没写」跟作品集 <https://decli.github.io/> 一字不差。
+现在主页上的是第二代的 **零 · 灰与橙**：灰色是 AI 的产能（AI 写的真代码、去了色的真截图），
+橙色是我的判断（那个 0、三个判断点、我对 codeless 说的那句话、每件作品替谁解决什么）。
+首屏那句「十五个作品，一行代码没写」跟作品集 <https://decli.github.io/> 一字不差。
+「长卷」放在 [`styles/scroll/`](../styles/scroll/) 备选。
 
 ```
-README.md        个人主页（长卷）—— studio/build.py --home scroll 生成，别手改
+README.md        个人主页（零 · 灰与橙）—— studio/build.py --home zero 生成，别手改
 assets/          README 里用到的 SVG：桌面 / 手机 × 亮 / 暗，每张四份
 build.py         作品数据（WORKS / POC / PRINCIPLES …，两代共用）+ 第一代三套风格的画法
 studio/          第二代生成器：长卷 / 零 · 灰与橙 / 极光 Pro，排版规矩写在 studio/README.md
@@ -34,39 +34,38 @@ docs/            本说明
 
 ```sh
 pip install fonttools brotli pillow     # 第一次
-python3 studio/build.py --home scroll   # 主页 + styles/ 下三套第二代
+python3 studio/build.py --home zero     # 主页 + styles/ 下三套第二代
 python3 build.py                      # 第一代三套（只在 styles/ 下）
 ```
 
-长卷里的签条、江山图上的山和地名签、题跋里的印谱都跟着数据走；印文没写的，取名字里的前两个汉字。
-想让它在长卷里上一整段，改 [`studio/scroll.py`](../studio/scroll.py) 的 `FEATURED`
-（「零」是 `zero.py` 的 `FEATURED`），再在 [`studio/content.py`](../studio/content.py) 的 `SHOT` 里给它定一块截图。
+首屏的「十五个作品」「15 / 4 / 6」、全部作品表都跟着数据走。想让它上大图（精选六件），
+改 `zero.py` 的 `FEATURED`（长卷是 [`studio/scroll.py`](../studio/scroll.py) 的 `FEATURED`），再在 [`studio/content.py`](../studio/content.py) 的 `SHOT` 里给它定一块截图。
 文案里出现母版字体里没有的字，build 会报错，按提示带上原始字体重切一次母版。
 
 ## 换一套风格
 
-第二代三套：`python3 studio/build.py --home scroll`、`--home zero` 或 `--home aurora-pro`，选中的那套生成到根目录。
+第二代三套：`python3 studio/build.py --home zero`、`--home scroll` 或 `--home aurora-pro`，选中的那套生成到根目录。
 对比见 [`styles/README.md`](../styles/README.md)。
 
 第一代的想换回主页：把 `build.py` 顶上的 `HOME_STYLE` 从 `None` 改成 `aurora` / `terminal` / `bento`，
 再跑 `python3 build.py`。平时它是 `None`，只往 `styles/` 下写，不会盖掉根目录的主页。
 
-### 长卷（正在用）
+### 零 · 灰与橙（正在用）
 
-<a href="../"><picture><source media="(prefers-color-scheme: dark)" srcset="../assets/hero-d-dark.svg"><img alt="长卷引首" src="../assets/hero-d-light.svg" width="100%"></picture></a>
+<a href="../"><picture><source media="(prefers-color-scheme: dark)" srcset="../assets/hero-d-dark.svg"><img alt="零 · 灰与橙首屏" src="../assets/hero-d-light.svg" width="100%"></picture></a>
+
+铺满一屏 codeless 仓库里 AI 写的真代码，按整字挖出一个「0」—— 只挖笔画那一圈，0 里照样是代码，
+正中一个从不打字的光标。往下是方法（人只在三个点上做判断）、codeless 的一次实测（$0.0127）、
+六件精选作品的真截图、全部十五件的索引、我相信的两件事、版权页。
+
+### 长卷（在 [`styles/scroll/`](../styles/scroll/)）
+
+<a href="../styles/scroll/"><picture><source media="(prefers-color-scheme: dark)" srcset="../styles/scroll/assets/hero-d-dark.svg"><img alt="长卷引首" src="../styles/scroll/assets/hero-d-light.svg" width="100%"></picture></a>
 
 引首是行楷的「一行代码 / 没写」，旁边朱丝栏里竖写着引言，最左一笔账：我写的代码〇行，AI 写的八万零八十四行。
 往下是十五个仓库连成的一整幅江山（山的轮廓是每一行代码的长度），六段作品（截图挂在天上，
 底下的山是画出这一屏的源代码，凑近了能读），十五张签条，最后是题跋和十五方印的印谱。
 整卷放在同一个 `<p>` 里，图和图之间没有缝，从上到下是一张纸。画法见 [`studio/README.md`](../studio/README.md)。
-
-### 零 · 灰与橙（在 [`styles/zero/`](../styles/zero/)）
-
-<a href="../styles/zero/"><picture><source media="(prefers-color-scheme: dark)" srcset="../styles/zero/assets/hero-d-dark.svg"><img alt="零 · 灰与橙首屏" src="../styles/zero/assets/hero-d-light.svg" width="100%"></picture></a>
-
-铺满一屏 codeless 仓库里 AI 写的真代码，按整字挖出一个「0」—— 只挖笔画那一圈，0 里照样是代码，
-正中一个从不打字的光标。往下是方法（人只在三个点上做判断）、codeless 的一次实测（$0.0127）、
-六件精选作品的真截图、全部十五件的索引、我相信的两件事、版权页。
 
 ### 极光 Aurora（第一代，在 [`styles/aurora/`](../styles/aurora/)）
 

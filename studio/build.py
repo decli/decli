@@ -3,8 +3,8 @@
 第二代主页的生成入口，三套方向。
 
     python3 studio/build.py                 三套都生成到 styles/scroll/、styles/zero/、styles/aurora-pro/
-    python3 studio/build.py --home scroll   「长卷」生成到仓库根目录 —— 个人主页上显示的就是它
-    python3 studio/build.py --home zero     换回「零 · 灰与橙」
+    python3 studio/build.py --home zero     「零 · 灰与橙」生成到仓库根目录 —— 个人主页上显示的就是它
+    python3 studio/build.py --home scroll   换成「长卷」
     python3 studio/build.py --home aurora-pro
 
 作品、文案、配色以外的数据只有一份：根目录 build.py 里的 WORKS / POC / PRINCIPLES …

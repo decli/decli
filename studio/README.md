@@ -1,7 +1,7 @@
 # studio —— 第二代主页的三套方向
 
 这里是第二代个人主页的生成器。三套方向共用一份数据（根目录 `build.py` 里的 `WORKS` / `POC` / `PRINCIPLES`）、
-一套排版工具，各自出一整页 README。个人主页现在用的是「长卷」：
+一套排版工具，各自出一整页 README。个人主页现在用的是「零」：
 
 | | 长卷（`scroll.py`） | 零 · 灰与橙（`zero.py`） | 极光 Pro（`aurora_pro.py`） |
 | --- | --- | --- | --- |
@@ -13,30 +13,13 @@
 
 ```sh
 python3 studio/build.py                   # 三套都生成到 styles/ 下
-python3 studio/build.py --home scroll     # 「长卷」生成到仓库根目录 —— 个人主页上显示的就是它
-python3 studio/build.py --home zero       # 换回「零」
+python3 studio/build.py --home zero       # 「零」生成到仓库根目录 —— 个人主页上显示的就是它
+python3 studio/build.py --home scroll     # 换成「长卷」
 ```
 
 依赖：`pip install fonttools brotli pillow`。不需要联网，也不需要原始字体和作品集仓库 ——
 用到的字切好的母版在 `studio/fonts/`，截图处理好的小图在 `studio/shots/`，分词结果在 `studio/seg.json`，
 「长卷」用到的行数、行长和代码摘录在 `studio/loc.json`、`studio/skyline.json`、`studio/code/`。
-改了文案、出现了母版里没有的字，build 会报错，提示带上原始字体重切：`FONTSRC=<目录> python3 studio/build.py --masters`。
-
---- | --- | --- |
-| 一句话 | 灰色的代码是 AI 的产能，橙色是我的判断 | 作品集同一套品牌，工艺拉满 |
-| 首屏 | 铺满 codeless 仓库里 AI 写的真代码，按整字挖出一个「0」—— 只挖笔画那一圈，0 里照样是代码，正中一个从不打字的光标 | 一整片夜空：分隔线过了文字就升起来，变成极光的底边 |
-| 截图 | 一律去色（那是 AI 的产能）；每件作品唯一的橙色是「它替谁解决什么」那一句 | 原色，放进玻璃卡片里，底下一团项目色的光 |
-| 字体 | Instrument Serif + 思源宋体 + Geist + 思源黑体 | Geist + 思源黑体 |
-| 预览 | [`styles/zero/`](../styles/zero/) | [`styles/aurora-pro/`](../styles/aurora-pro/) |
-
-```sh
-python3 studio/build.py                   # 两套都生成到 styles/ 下
-python3 studio/build.py --home zero       # 「零」生成到仓库根目录 —— 个人主页上显示的就是它
-python3 studio/build.py --home aurora-pro
-```
-
-依赖：`pip install fonttools brotli pillow`。不需要联网，也不需要原始字体和作品集仓库 ——
-用到的字切好的母版在 `studio/fonts/`，截图处理好的小图在 `studio/shots/`，分词结果在 `studio/seg.json`。
 改了文案、出现了母版里没有的字，build 会报错，提示带上原始字体重切：`FONTSRC=<目录> python3 studio/build.py --masters`。
 
 ---
