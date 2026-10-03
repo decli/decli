@@ -53,11 +53,14 @@ FONT_SRC = {
     "sans-sc-m":   (pathlib.Path(NOTO + "NotoSansCJK-Medium.ttc"), 2),
     "sans-sc-b":   (pathlib.Path(NOTO + "NotoSansCJK-Bold.ttc"), 2),
     "sans-sc-k":   (pathlib.Path(NOTO + "NotoSansCJK-Black.ttc"), 2),
+    # 「长卷」用：马善政楷书（毛笔字，只切标题那几十个字）
+    "brush":       (FONTSRC / "MaShanZheng-Regular.ttf", None),
 }
 LICENSE_NOTE = {
     "instr": "Instrument Serif — SIL OFL 1.1",
     "geist": "Geist / Geist Mono — SIL OFL 1.1",
     "noto": "Noto Serif / Sans CJK (思源宋体 / 黑体) — SIL OFL 1.1",
+    "brush": "Ma Shan Zheng (马善政楷书) — SIL OFL 1.1",
 }
 
 SYS_SANS = ("-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',"
@@ -741,10 +744,11 @@ def png_uri(path):
 #  Markdown：一张响应式、跟主题切换的图
 # ═══════════════════════════════════════════════════════════════════
 
-def picture(base, alt, width="100%", href=None, mobile=True, prefix="assets/"):
+def picture(base, alt, width="100%", href=None, mobile=True, prefix="assets/", align=None):
     """base-d-light / base-d-dark / base-m-light / base-m-dark 四张。
     手机版一直用到 1151px：窗口窄于这个宽度时 GitHub 的 README 栏不到 720px，桌面版缩过去正文不到 12px。
-    第一个命中的 <source> 生效，所以手机两条写在前面。"""
+    第一个命中的 <source> 生效，所以手机两条写在前面。
+    align="top"：行内图顶对齐，图和图之间不留行距缝（「长卷」拼成一整张纸用）。"""
     p = prefix
     src = []
     if mobile:
@@ -752,7 +756,8 @@ def picture(base, alt, width="100%", href=None, mobile=True, prefix="assets/"):
         src.append(f'<source media="(max-width: 1151px)" srcset="{p}{base}-m-light.svg">')
     src.append(f'<source media="(prefers-color-scheme: dark)" srcset="{p}{base}-d-dark.svg">')
     w = f' width="{width}"' if width else ""
-    img = f'<picture>{"".join(src)}<img alt="{esc(alt)}" src="{p}{base}-d-light.svg"{w}></picture>'
+    a = f' align="{align}"' if align else ""
+    img = f'<picture>{"".join(src)}<img alt="{esc(alt)}" src="{p}{base}-d-light.svg"{w}{a}></picture>'
     return f'<a href="{href}">{img}</a>' if href else img
 
 

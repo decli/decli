@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """
-两套新主页的生成入口。
+第二代主页的生成入口，三套方向。
 
-    python3 studio/build.py                 两套都生成到 styles/zero/ 和 styles/aurora-pro/
-    python3 studio/build.py --home zero     「零 · 灰与橙」生成到仓库根目录 —— 个人主页上显示的就是它
+    python3 studio/build.py                 三套都生成到 styles/scroll/、styles/zero/、styles/aurora-pro/
+    python3 studio/build.py --home scroll   「长卷」生成到仓库根目录 —— 个人主页上显示的就是它
+    python3 studio/build.py --home zero     换回「零 · 灰与橙」
     python3 studio/build.py --home aurora-pro
 
 作品、文案、配色以外的数据只有一份：根目录 build.py 里的 WORKS / POC / PRINCIPLES …
@@ -26,8 +27,9 @@ sys.path.insert(0, str(HERE))
 import kit  # noqa: E402
 import zero  # noqa: E402
 import aurora_pro  # noqa: E402
+import scroll  # noqa: E402
 
-STYLES = {"zero": zero, "aurora-pro": aurora_pro}
+STYLES = {"zero": zero, "aurora-pro": aurora_pro, "scroll": scroll}
 
 
 def main(argv):

@@ -1,0 +1,65 @@
+{
+ "total": 80084,
+ "projects": {
+  "codeless": {
+   "loc": 2400,
+   "files": 32
+  },
+  "ftms": {
+   "loc": 37031,
+   "files": 123
+  },
+  "ems": {
+   "loc": 3514,
+   "files": 23
+  },
+  "logicc": {
+   "loc": 2967,
+   "files": 1
+  },
+  "wxformat3": {
+   "loc": 2345,
+   "files": 11
+  },
+  "macpleco": {
+   "loc": 11936,
+   "files": 58
+  },
+  "ip-geo": {
+   "loc": 2449,
+   "files": 23
+  },
+  "jobornot": {
+   "loc": 2829,
+   "files": 34
+  },
+  "wx-export": {
+   "loc": 2774,
+   "files": 3
+  },
+  "tabinfocopy": {
+   "loc": 64,
+   "files": 4
+  },
+  "ip-display": {
+   "loc": 105,
+   "files": 5
+  },
+  "pagescroll": {
+   "loc": 1174,
+   "files": 1
+  },
+  "bing-wallpaper": {
+   "loc": 663,
+   "files": 1
+  },
+  "codehelper": {
+   "loc": 6087,
+   "files": 48
+  },
+  "chinesechess": {
+   "loc": 3746,
+   "files": 24
+  }
+ }
+}

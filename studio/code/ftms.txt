@@ -1,0 +1,107 @@
+# ftms/src/pages/Dashboard.tsx  (从第 16 行起，只留纯 ASCII 的行)
+export default function Dashboard() {
+  const { t } = useT();
+  const db = useDb();
+  const { viewer } = useAuth();
+  const d = useMemo(() => dashboardData(db, viewer), [db, viewer]);
+  return (
+    <div className="page">
+      <SetupGuide />
+      <RoleBand />
+      <div className="page-head">
+        <div>
+          <p>
+          </p>
+        </div>
+      </div>
+      <div className="kpis">
+        <Kpi
+          icon="wallet"
+          v={formatCompact(d.kpi.totalUsd)}
+          spark={d.monthly.map((m) => m.amount)}
+        />
+        <Kpi
+          icon="alert"
+          v={String(d.kpi.troubled)}
+          tone={d.kpi.troubled ? "coral" : undefined}
+          to="/follow-ups?risk=1"
+        />
+        <Kpi
+          icon="gauge"
+          v={String(d.kpi.warn)}
+          tone={d.kpi.loss ? "coral" : d.kpi.warn ? "amber" : undefined}
+          to="/orders?risk=1"
+        />
+      </div>
+      <div className="dash">
+        <div className="dash-2">
+          <section className="card">
+            <div className="card-head">
+              <span className="spacer" />
+            </div>
+            {d.risks.length === 0 ? (
+            ) : (
+              <div>
+                {d.risks.map((r) => (
+                  <Link className="risk" data-tone={r.tone} to={r.href} key={r.title}>
+                    <span className="risk-ico">
+                      <Icon name={r.tone === "coral" ? "alert" : r.tone === "amber" ? "info" : "flag"} />
+                    </span>
+                    <span style={{ minWidth: 0 }}>
+                      <b>{r.title}</b>
+                      <small>{r.detail}</small>
+                    </span>
+                    <span className="go">
+                      {r.action}
+                      <Icon name="chevronRight" />
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </section>
+          <section className="card">
+            <div className="card-head">
+            </div>
+            <div className="card-body" style={{ paddingTop: 4, paddingBottom: 6 }}>
+              {d.upcoming.length === 0 ? (
+              ) : (
+                <div className="timeline">
+                  {d.upcoming.map((s) => (
+                    <Link className="tl-row" to={`/follow-ups?id=${s.id}`} key={s.id} data-late={s.hasLate ? "1" : "0"}>
+                      <span className="tl-when">{humanDate(s.nextDate)}</span>
+                      <span style={{ minWidth: 0 }}>
+                        <span className="batch-cell">
+                          <b className="cell-main">{s.batchNo}</b>
+                          {s.batchLabel ? <span className="badge-batch">{s.batchLabel}</span> : null}
+                        </span>
+                        <span className="cell-sub">
+                          <span>
+                          </span>
+                        </span>
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          </section>
+        </div>
+        <section className="card">
+          <div className="card-head">
+            <span className="spacer" />
+          </div>
+          <div className="card-body">
+            <MonthlyChart data={d.monthly} />
+          </div>
+        </section>
+        <div className="dash-3">
+          <section className="card">
+            <div className="card-head">
+            </div>
+            <div className="card-body">
+              <BarList data={d.countries.map((c) => ({ name: c.name, value: c.value }))} format={(v) => formatCompact(v)} />
+            </div>
+          </section>
+          <section className="card">
+            <div className="card-head">

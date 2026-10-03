@@ -1,0 +1,92 @@
+# ems/assets/js/views/dashboard.js  (从第 10 行起，只留纯 ASCII 的行)
+function salesView() {
+  const myDeals = DEALS.filter(d => d.owner === ME.name && d.stage !== 'won');
+  const pipeline = myDeals.reduce((a, d) => a + d.amount, 0);
+  const won = DEALS.filter(d => d.owner === ME.name && d.stage === 'won').reduce((a, d) => a + d.amount, 0);
+  const wonCny = won * 7.16;
+  const topLeads = [...LEADS].sort((a, b) => b.score - a.score).slice(0, 4);
+  return h`
+    <div class="page-head">
+      <div>
+      </div>
+      <div class="actions">
+      </div>
+    </div>
+    <div class="grid g4 mb16">
+    </div>
+    <div class="grid g-3-2 mb16">
+      ${card(h`
+        <div class="list" style="margin:-16px">
+          ${TODOS.map(t => {
+            const [k, label] = PRI[t.pri];
+            return h`<a class="list-item" href="${t.link}" style="color:inherit">
+              <span class="tag ${k}" style="margin-top:2px">${label}</span>
+              <div class="li-main">
+                <div class="li-title">${esc(t.title)}</div>
+                <div class="li-desc">${esc(t.meta)}</div>
+                <div class="li-meta">${icon('spark')} <span>${esc(t.why)}</span></div>
+              </div>
+              <span class="muted">${icon('arrow')}</span>
+            </a>`;
+          })}
+        </div>`,
+      ${card(h`
+        <div class="hint mb12">
+          ${icon('clock')}
+        </div>
+        <div class="list" style="margin:0 -16px -16px">
+          ${NIGHT_BRIEF.items.map(i => h`
+            <div class="list-item">
+              <div class="li-main">
+                <div class="li-desc">${esc(i.text)}</div>
+              </div>
+            </div>`)}
+        </div>`,
+    </div>
+    <div class="grid g-2-1 mb16">
+      ${card(h`
+        <div class="flex ac jb mb12">
+        </div>
+        <div class="list" style="margin:0 -16px -16px">
+          ${topLeads.map(l => h`
+            <div class="list-item">
+              <div class="li-main">
+                <div class="li-desc">${esc(l.why)}</div>
+              </div>
+            </div>`)}
+        </div>`,
+      ${card(h`
+        ${funnel(FUNNEL.slice(2), { w: 400, rowH: 34 })}
+        <div class="hint warn mt12" style="font-size:12px">
+          ${icon('alert')}
+        </div>`,
+    </div>
+    <div class="grid g2">
+      ${card(h`
+        <div class="list" style="margin:-16px">
+          ${DEALS.filter(d => d.risk || d.days > 5).slice(0, 4).map(d => h`
+            <div class="list-item">
+              <div class="li-main">
+                <div class="li-title">${esc(d.flag)} ${esc(d.name)}</div>
+              </div>
+            </div>`)}
+      ${card(h`
+    </div>`;
+}
+function bossView() {
+  const totalRev = CHANNEL_ROI.reduce((a, c) => a + c.revenue, 0);
+  const totalSpend = CHANNEL_ROI.reduce((a, c) => a + c.spend, 0);
+  const totalDeals = CHANNEL_ROI.reduce((a, c) => a + c.deals, 0);
+  const assetAvg = Math.round(CUSTOMERS.reduce((a, c) => a + c.assetScore, 0) / CUSTOMERS.length);
+  const publicPool = CUSTOMERS.filter(c => c.pool === 'public').length;
+  const roiRows = [...CHANNEL_ROI]
+    .map(c => ({ name: c.ch, v: Math.round(c.revenue / c.spend * 10) / 10, color: c.color }))
+    .sort((a, b) => b.v - a.v);
+  return h`
+    <div class="page-head">
+      <div>
+      </div>
+      <div class="actions">
+      </div>
+    </div>
+    <div class="grid g5 mb16">

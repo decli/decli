@@ -1,0 +1,116 @@
+# codeless/poc/web/index.html  (从第 6 行起，只留纯 ASCII 的行)
+<title>codeless</title>
+<style>
+:root {
+  --bg: #f7f7f5; --panel: #fff; --line: #e5e4e0; --text: #23252b; --dim: #74747c;
+  --accent: #3b5bdb; --ok: #2f8f5b; --bad: #c4443c; --warn: #b4690e; --bubble: #eef1fc;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--text); line-height: 1.6;
+  font-family: system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  display: flex; height: 100vh; overflow: hidden;
+}
+aside { width: 260px; border-right: 1px solid var(--line); background: #fbfbf9;
+        display: flex; flex-direction: column; flex-shrink: 0; }
+aside h1 { margin: 0; padding: 1rem 1rem .25rem; font-size: 1.05rem; }
+aside .sub { padding: 0 1rem .75rem; color: var(--dim); font-size: .78rem; }
+aside .list { flex: 1; overflow-y: auto; padding: 0 .6rem 1rem; }
+.newbtn { margin: 0 1rem .75rem; padding: .5rem; border: 1px solid var(--line);
+          border-radius: 8px; background: #fff; cursor: pointer; font: inherit; font-size: .85rem; }
+.item { padding: .5rem .6rem; border-radius: 8px; cursor: pointer; margin-bottom: .2rem; font-size: .84rem; }
+.item:hover { background: #f2f1ed; }
+.item.active { background: #eaeaf6; }
+.item .meta { color: var(--dim); font-size: .74rem; display: flex; gap: .4rem; margin-top: .15rem; }
+.badge { padding: 0 .3rem; border-radius: 4px; font-size: .7rem; }
+.badge.running { background: #eef1fc; color: var(--accent); }
+.badge.idle { background: #e9f4ee; color: var(--ok); }
+.badge.failed { background: #fbeceb; color: var(--bad); }
+@media (max-width: 820px) { aside { width: 180px; } aside .sub { display: none; } }
+@media (max-width: 560px) { aside { width: 150px; } aside h1 { font-size: .95rem; } }
+main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.topbar { padding: .6rem 1.25rem; border-bottom: 1px solid var(--line); background: var(--panel);
+          display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; min-height: 3rem; }
+.topbar .title { font-size: .9rem; font-weight: 500; margin-right: auto;
+                 overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.topbar a { padding: .3rem .7rem; border: 1px solid var(--line); border-radius: 7px;
+            text-decoration: none; color: var(--text); font-size: .8rem; background: #fcfcfb; }
+.topbar a.go { background: var(--accent); color: #fff; border-color: var(--accent); }
+#feed { flex: 1; overflow-y: auto; padding: 1.25rem; }
+.inner { max-width: 820px; margin: 0 auto; }
+.welcome h2 { font-size: 1.05rem; margin: 0 0 .5rem; }
+.welcome p { color: var(--dim); font-size: .88rem; margin: 0 0 1rem; }
+.examples { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: 1rem; }
+.examples button { padding: .3rem .6rem; border: 1px solid var(--line); border-radius: 999px;
+                   background: #fff; color: var(--dim); font-size: .8rem; cursor: pointer; }
+.user { background: var(--bubble); padding: .6rem .8rem; border-radius: 10px;
+        margin: 1.4rem 0 .8rem auto; max-width: 80%; width: fit-content; font-size: .9rem; }
+.stage { margin: 1rem 0 .4rem; font-weight: 500; font-size: .86rem; color: var(--dim); }
+.say { margin: .4rem 0; font-size: .9rem; white-space: pre-wrap; }
+.cmd { font-family: var(--mono); font-size: .8rem; color: #6741b8; margin: .3rem 0; white-space: pre-wrap; }
+.cmd::before { content: "$ "; }
+.out { font-family: var(--mono); font-size: .78rem; color: var(--dim); margin: .2rem 0 .4rem;
+       white-space: pre-wrap; max-height: 10rem; overflow-y: auto; }
+.info { font-size: .8rem; color: var(--dim); margin: .2rem 0; }
+.warn { font-size: .85rem; color: var(--warn); margin: .4rem 0; }
+.check { font-size: .85rem; margin: .15rem 0; }
+.check.ok { color: var(--ok); }
+.check.bad { color: var(--bad); }
+details.fold { margin: .25rem 0; font-size: .82rem; }
+details.fold > summary { cursor: pointer; color: var(--dim); list-style: none; }
+details.fold > summary::-webkit-details-marker { display: none; }
+details.fold > summary.write { color: var(--ok); }
+details.fold > summary em { font-style: italic; color: #9a9a9f; }
+details.fold > pre { margin: .3rem 0 .5rem 1rem; padding: .6rem; background: #f3f2ee;
+                     border-radius: 7px; overflow: auto; max-height: 20rem;
+                     font-size: .76rem; font-family: var(--mono); white-space: pre-wrap; }
+.result { margin: .7rem 0; padding: .7rem .9rem; border: 1px solid var(--line);
+          border-radius: 9px; background: var(--panel); font-size: .85rem; }
+.result a { color: var(--accent); }
+.composer { border-top: 1px solid var(--line); background: var(--panel); padding: .75rem 1.25rem 1rem; }
+.composer .inner { display: flex; gap: .6rem; align-items: flex-end; }
+.composer textarea {
+  flex: 1; min-height: 44px; max-height: 160px; padding: .6rem .75rem; resize: none;
+  border: 1px solid var(--line); border-radius: 10px; font: inherit; font-size: .9rem; background: #fcfcfb;
+}
+.composer select { border: 1px solid var(--line); border-radius: 10px; padding: .6rem .4rem;
+                   font: inherit; font-size: .82rem; background: #fcfcfb; }
+.composer button { padding: .6rem 1.1rem; border: 0; border-radius: 10px; background: var(--accent);
+                   color: #fff; font: inherit; font-size: .88rem; cursor: pointer; }
+.composer button:disabled { background: #a9b3d9; cursor: not-allowed; }
+.hint { max-width: 820px; margin: .4rem auto 0; color: var(--dim); font-size: .75rem; }
+</style>
+</head>
+<body>
+<aside>
+  <h1>codeless</h1>
+  <div class="list" id="list"></div>
+</aside>
+<main>
+  <div id="feed"><div class="inner" id="inner"></div></div>
+  <div class="composer">
+    <div class="inner">
+      <select id="tpl"></select>
+    </div>
+  </div>
+</main>
+<script>
+const $ = (id) => document.getElementById(id);
+let current = null, es = null, rendered = 0, lastNode = null, lastKind = "", retry = null;
+const esc = (s) => String(s).replace(/[&<>"']/g, c =>
+  ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const tail = (s) => {
+  const flat = s.replace(/\s+/g, " ").trim();
+};
+async function api(path, options) {
+  const resp = await fetch(path, options);
+  if (!resp.ok) throw new Error((await resp.text()).slice(0, 200));
+  return resp.json();
+}
+async function loadTemplates() {
+  const list = await api("/api/templates");
+  $("tpl").innerHTML = list.map(t => `<option value="${t.key}">${t.label}</option>`).join("");
+}
+async function loadList() {

@@ -1,17 +1,17 @@
 # 风格实验室
 
-主页现在用的是第二代的「零 · 灰与橙」。这里放着几套备选，每一套都能直接点进去看完整效果；
+主页现在用的是第二代的「长卷」。这里放着几套备选，每一套都能直接点进去看完整效果；
 第一代的「极光」从根目录挪到了 [aurora/](aurora/)。
 
-## 第二代：两套完整的新主页（主页用的是「零」）
+## 第二代：三套完整的新主页（主页用的是「长卷」）
 
-| [零 · 灰与橙](zero/) | [极光 Pro](aurora-pro/) |
-| --- | --- |
-| <a href="zero/"><img alt="零 · 灰与橙" src="zero/assets/hero-d-light.svg" width="100%"></a> | <a href="aurora-pro/"><img alt="极光 Pro" src="aurora-pro/assets/hero-d-dark.svg" width="100%"></a> |
-| 灰色的代码是 AI 的产能，橙色是我的判断。首屏是 codeless 里 AI 写的真代码，按整字挖出一个「0」 | 作品集同一套品牌，工艺拉满。首屏一整片夜空，分隔线过了文字升起来变成极光的底边 |
+| [长卷](scroll/) | [零 · 灰与橙](zero/) | [极光 Pro](aurora-pro/) |
+| --- | --- | --- |
+| <a href="scroll/"><img alt="长卷" src="scroll/assets/hero-d-light.svg" width="100%"></a> | <a href="zero/"><img alt="零 · 灰与橙" src="zero/assets/hero-d-light.svg" width="100%"></a> | <a href="aurora-pro/"><img alt="极光 Pro" src="aurora-pro/assets/hero-d-dark.svg" width="100%"></a> |
+| 一卷从右往左看的山水：山是 AI 写下的代码，近山就是画出那张截图的源文件；卷上的朱印是我盖的 | 灰色的代码是 AI 的产能，橙色是我的判断。首屏是 codeless 里 AI 写的真代码，按整字挖出一个「0」 | 作品集同一套品牌，工艺拉满。首屏一整片夜空，分隔线过了文字升起来变成极光的底边 |
 
-两套用同一份数据、同一批真截图，桌面 / 手机 × 亮 / 暗各排一版。生成器和排版规矩在 [`studio/`](../studio/)，
-换主页就一行：`python3 studio/build.py --home zero`（或 `--home aurora-pro`），README 和图生成到仓库根目录。
+三套用同一份数据、同一批真截图，桌面 / 手机 × 亮 / 暗各排一版。生成器和排版规矩在 [`studio/`](../studio/)，
+换主页就一行：`python3 studio/build.py --home scroll`（或 `--home zero`、`--home aurora-pro`），README 和图生成到仓库根目录。
 
 ## 第一代
 

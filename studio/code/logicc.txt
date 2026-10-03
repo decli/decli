@@ -1,0 +1,57 @@
+# logicc/index.html  (从第 527 行起，只留纯 ASCII 的行)
+const GAMES = [
+  {
+    levels: [
+    ]
+  },
+  {
+    levels: [
+    ]
+  },
+  {
+    levels: [
+    ]
+  },
+  {
+    levels: [
+    ]
+  },
+  {
+    levels: [
+    ]
+  },
+  {
+    levels: [
+    ]
+  },
+  {
+    levels: [
+    ]
+  },
+  {
+    levels: [
+    ]
+  },
+  {
+    levels: [
+    ]
+  },
+  {
+    levels: [
+    ]
+  },
+  {
+    levels: [
+    ]
+  },
+  {
+    levels: [
+    ]
+  }
+];
+const G = {}; GAMES.forEach(g => { G[g.id] = g; S.level[g.id] = 1; S.streak[g.id] = 0; });
+function sparkle(x, y, chars) {
+  for (let i = 0; i < 12; i++) {
+    const s = el('span', 'spark', pick(set));
+    s.style.left = px(x); s.style.top = px(y);
+    const a = Math.random() * Math.PI * 2, d = 70 + Math.random() * 130;

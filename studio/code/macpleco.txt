@@ -1,0 +1,122 @@
+# MacPleco/Sources/MacPlecoKit/Features/Clean/CleanView.swift  (从第 4 行起，只留纯 ASCII 的行)
+struct CleanView: View {
+    @Environment(AppModel.self) private var model
+    /// Raised when the selection is about to be erased rather than trashed.
+    /// An irreversible operation gets a surface of its own to be confirmed on,
+    /// which is also the only place its button is allowed to be filled.
+    @State private var confirmingErase = false
+    private var clean: CleanModel { model.clean }
+    var body: some View {
+        ZStack {
+            Page(destination: .clean, trailing: AnyView(rescanButton)) {
+                switch clean.phase {
+                case .idle, .scanning:
+                    ScanningCard(model: clean).rises(0)
+                case .ready, .cleaning:
+                    summary.rises(0)
+                    blockedBanner.rises(1)
+                    categoryList
+                case .finished(let bytes, let trashed, let erased):
+                    FinishedCard(
+                        bytes: bytes,
+                        trashed: trashed,
+                        erased: erased,
+                        skipped: clean.lastSkipped
+                    ) {
+                        clean.dismissResult()
+                    }
+                    .rises(0)
+                    if !clean.categories.isEmpty {
+                        categoryList
+                    }
+                }
+            }
+            if clean.isCleaning {
+                CleaningVeil()
+                    .transition(.opacity)
+            }
+        }
+        .animation(Motion.reveal, value: clean.isCleaning)
+        .task {
+            await clean.scanIfNeeded(registry: model.registry)
+        }
+        .sheet(isPresented: $confirmingErase) {
+            EraseConfirmation(
+                size: clean.selectedSize,
+                count: clean.selectedCount,
+                onCancel: { confirmingErase = false },
+                onConfirm: {
+                    confirmingErase = false
+                    Task { await clean.clean(storage: model.storage, ledger: model.ledger) }
+                }
+            )
+        }
+    }
+    // MARK: - Chrome
+    private var rescanButton: some View {
+        Button {
+            Task { await clean.scan(registry: model.registry) }
+        } label: {
+        }
+        .buttonStyle(ActionButtonStyle(.neutral))
+        .actionEnabled(!clean.isBusy)
+    }
+    // MARK: - Summary
+    private var summary: some View {
+        GlassCard(padding: Space.xl) {
+            VStack(alignment: .leading, spacing: Space.lg) {
+                HStack(alignment: .top, spacing: Space.xl) {
+                    VStack(alignment: .leading, spacing: Space.xs) {
+                            .font(Typo.label)
+                            .foregroundStyle(Palette.inkTertiary)
+                        HStack(alignment: .firstTextBaseline, spacing: Space.xs) {
+                            let parts = Bytes.split(clean.selectedSize)
+                            Text(parts.number)
+                                .font(Typo.hero)
+                                .monospacedDigit()
+                                .foregroundStyle(Palette.ink)
+                                .contentTransition(.numericText())
+                            // The unit sits on the number's baseline, a step
+                            // down and a shade back: "79.9 GB" is a quantity
+                            // and a ruler, not one word.
+                            Text(parts.unit)
+                                .font(Typo.cardTitle)
+                                .foregroundStyle(Palette.inkTertiary)
+                        }
+                        Text(
+                            t(
+                            )
+                        )
+                        .font(Typo.labelPlain)
+                        .foregroundStyle(Palette.inkSecondary)
+                    }
+                    Spacer(minLength: Space.md)
+                    VStack(alignment: .trailing, spacing: Space.sm) {
+                        cleanButton
+                        quickSelects
+                    }
+                }
+                Divider().overlay(Palette.hairline)
+                reassurance
+            }
+        }
+        .animation(Motion.reveal, value: clean.selectedSize)
+    }
+    /// single button changes intent with the state of a switch.
+    ///
+    /// With "Skip the Trash" off it is `go`: filled aqua, because everything
+    /// it moves can be put back. Turn the switch on and the same click stops
+    /// being recoverable, so the button stops looking recoverable too: it
+    /// drops to `emphasis`, becomes an outlined destructive proposal, renames
+    /// itself, and routes through a confirmation sheet instead of acting.
+    @ViewBuilder
+    private var cleanButton: some View {
+        if clean.permanentDelete {
+            Button {
+                confirmingErase = true
+            } label: {
+                Label(
+                    systemImage: "trash.slash"
+                )
+            }
+            .buttonStyle(ActionButtonStyle(.destructive, height: Control.emphasis))

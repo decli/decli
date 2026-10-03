@@ -1,0 +1,100 @@
+# wxformat3/js/editor.js  (从第 6 行起，只留纯 ASCII 的行)
+class Editor {
+    constructor(textarea, onInput) {
+        this.textarea = textarea;
+        this.onInput = onInput;
+        this.debounceTimer = null;
+        this.init();
+    }
+    init() {
+        this.textarea.addEventListener('input', () => {
+            this.debouncedInput();
+            this.updateStats();
+        });
+        this.textarea.addEventListener('keydown', (e) => {
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                this.insertTab(e.shiftKey);
+            }
+        });
+        this.updateStats();
+    }
+    /**
+     */
+    debouncedInput() {
+        clearTimeout(this.debounceTimer);
+        this.debounceTimer = setTimeout(() => {
+            this.onInput(this.textarea.value);
+        }, 80);
+    }
+    /**
+     */
+    insertTab(reverse) {
+        const start = this.textarea.selectionStart;
+        const end = this.textarea.selectionEnd;
+        const value = this.textarea.value;
+        if (reverse) {
+            const beforeCursor = value.substring(0, start);
+            const lastNewline = beforeCursor.lastIndexOf('\n');
+            const lineStart = lastNewline + 1;
+            const linePrefix = value.substring(lineStart, lineStart + 2);
+            if (linePrefix === '  ') {
+                this.textarea.value = value.substring(0, lineStart) + value.substring(lineStart + 2);
+                this.textarea.selectionStart = this.textarea.selectionEnd = start - 2;
+            }
+        } else {
+            this.textarea.value = value.substring(0, start) + '  ' + value.substring(end);
+            this.textarea.selectionStart = this.textarea.selectionEnd = start + 2;
+        }
+        this.debouncedInput();
+    }
+    /**
+     */
+    insertMarkdown(prefix, suffix = '', placeholder = '') {
+        const start = this.textarea.selectionStart;
+        const end = this.textarea.selectionEnd;
+        const value = this.textarea.value;
+        const selectedText = value.substring(start, end) || placeholder;
+        const insertion = prefix + selectedText + suffix;
+        this.textarea.value = value.substring(0, start) + insertion + value.substring(end);
+        const cursorPos = start + prefix.length;
+        this.textarea.selectionStart = cursorPos;
+        this.textarea.selectionEnd = cursorPos + selectedText.length;
+        this.textarea.focus();
+        this.debouncedInput();
+    }
+    /**
+     */
+    insertLinePrefix(prefix) {
+        const start = this.textarea.selectionStart;
+        const value = this.textarea.value;
+        const beforeCursor = value.substring(0, start);
+        const lastNewline = beforeCursor.lastIndexOf('\n');
+        const lineStart = lastNewline + 1;
+        this.textarea.value = value.substring(0, lineStart) + prefix + value.substring(lineStart);
+        this.textarea.selectionStart = this.textarea.selectionEnd = start + prefix.length;
+        this.textarea.focus();
+        this.debouncedInput();
+    }
+    /**
+     */
+    updateStats() {
+        const value = this.textarea.value;
+        const charCount = value.length;
+        const lineCount = value.split('\n').length;
+        const charEl = document.getElementById('char-count');
+        const lineEl = document.getElementById('line-count');
+    }
+    /**
+     */
+    getValue() {
+        return this.textarea.value;
+    }
+    /**
+     */
+    setValue(text) {
+        this.textarea.value = text;
+        this.onInput(text);
+        this.updateStats();
+    }
+}
