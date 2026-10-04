@@ -19,7 +19,7 @@ python3 studio/build.py --home scroll     # 换成「长卷」
 
 依赖：`pip install fonttools brotli pillow`。不需要联网，也不需要原始字体和作品集仓库 ——
 用到的字切好的母版在 `studio/fonts/`，截图处理好的小图在 `studio/shots/`，分词结果在 `studio/seg.json`，
-「长卷」用到的行数、行长和代码摘录在 `studio/loc.json`、`studio/skyline.json`、`studio/code/`。
+「长卷」用到的行长和代码摘录在 `studio/skyline.json`、`studio/code/`，行数就从行长表里数。
 改了文案、出现了母版里没有的字，build 会报错，提示带上原始字体重切：`FONTSRC=<目录> python3 studio/build.py --masters`。
 
 ---

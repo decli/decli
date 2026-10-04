@@ -138,22 +138,13 @@ def _sibling(rel):
     return None
 
 
-def _loc():
-    cache = HERE / "loc.json"
-    src = _sibling("code/index.json")
-    if src:
-        data = json.loads(src.read_text())
-        # 长卷画的是十五件作品仓库的代码；作品集首页的 total 还含清单以外的仓库（含私有），这里只取作品那部分
-        slim = {"total": sum(v["loc"] for v in data["projects"].values()),
-                "projects": {k: {"loc": v["loc"], "files": v["files"]} for k, v in data["projects"].items()}}
-        cache.write_text(json.dumps(slim, ensure_ascii=False, indent=1) + "\n")
-    return json.loads(cache.read_text())
-
-
-LOC = _loc()
+_SKY = json.loads((HERE / "skyline.json").read_text())
+# 行数直接从行长表里数：远山「一行不少」，山有几行，卷上写的就是几行。
+# 作品集首页的行数是各仓库 wc -l（文档、配置都算），跟这里画的源码不是一回事，所以不跟它同步
+LOC = {"projects": {k: {"loc": len(base64.b64decode(v))} for k, v in _SKY.items()}}
+LOC["total"] = sum(v["loc"] for v in LOC["projects"].values())
 TOTAL = LOC["total"]
 MAXLOC = max(v["loc"] for v in LOC["projects"].values())
-_SKY = json.loads((HERE / "skyline.json").read_text())
 
 
 def skyline(slug):

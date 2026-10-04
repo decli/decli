@@ -1,4 +1,4 @@
-# logicc/index.html  (从第 527 行起，只留纯 ASCII 的行)
+# logicc/index.html  (从第 551 行起，只留纯 ASCII 的行)
 const GAMES = [
   {
     levels: [
@@ -41,8 +41,7 @@ const GAMES = [
     ]
   },
   {
-    levels: [
-    ]
+    levels: []
   },
   {
     levels: [
@@ -55,3 +54,7 @@ function sparkle(x, y, chars) {
     const s = el('span', 'spark', pick(set));
     s.style.left = px(x); s.style.top = px(y);
     const a = Math.random() * Math.PI * 2, d = 70 + Math.random() * 130;
+    s.style.setProperty('--dx', px(Math.cos(a) * d)); s.style.setProperty('--dy', px(Math.sin(a) * d));
+    fx.appendChild(s); setTimeout(() => s.remove(), 950);
+  }
+}
