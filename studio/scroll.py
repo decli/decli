@@ -758,7 +758,7 @@ def ledger(d, t, x_right, top, size, big, step, cls=True):
 
 
 def hero(t, mobile=False):
-    title = (f"decli 作品长卷 · 引首：一行代码没写。{C.HEAD_A}从 UI 交互设计到每一行代码编写，全部由 AI 完成。"
+    title = (f"decli 作品长卷 · 引首：一行代码没写。{cn(C.N)}个作品，从 UI 交互设计到每一行代码编写，全部由 AI 完成。"
              f"我只做三件事：提出问题、选择方案、验收结果——人出判断，AI 出产能。我写的代码〇行，AI 写的 {TOTAL:,} 行。")
     if not mobile:
         W, H = DW, 1080
@@ -1160,7 +1160,7 @@ def build(out: pathlib.Path, prefix="assets/"):
     def P(base, alt, href):
         return kit.picture(base, alt, "100%", href, prefix=prefix, align="top")
 
-    pics = [P("hero", f"decli 作品长卷 · 引首：一行代码没写。{C.HEAD_A}" + "".join(C.LEDE) + f" 我写的代码〇行，AI 写的 {TOTAL:,} 行。", C.SITE),
+    pics = [P("hero", f"decli 作品长卷 · 引首：一行代码没写。{cn(C.N)}个作品，" + "".join(C.LEDE) + f" 我写的代码〇行，AI 写的 {TOTAL:,} 行。", C.SITE),
             P("range", f"八万行代码的山水：十五个仓库的全部代码一字排开，共 {TOTAL:,} 行。山的轮廓是每一行代码的长度，山的高低是代码量。", C.SITE)]
     pics += [P(f"work-{s}", C.alt_work(C.BY[s]) + f" — AI 写了 {loc(s):,} 行", C.BY[s]["link"]) for s in FEATURED]
     pics += [P(f"slip-{w['slug']}", C.alt_work(w), w["link"]) for w in C.WORKS]

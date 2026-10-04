@@ -4,7 +4,7 @@
 
 现在主页上的是第二代的 **零 · 灰与橙**：灰色是 AI 的产能（AI 写的真代码、去了色的真截图），
 橙色是我的判断（那个 0、三个判断点、我对 codeless 说的那句话、每件作品替谁解决什么）。
-首屏那句「十五个作品，一行代码没写」跟作品集 <https://decli.github.io/> 一字不差。
+首屏那句「代码已不稀缺，判断才是。」跟作品集 <https://decli.github.io/> 一字不差。
 「长卷」放在 [`styles/scroll/`](../styles/scroll/) 备选。
 
 ```
@@ -38,7 +38,7 @@ python3 studio/build.py --home zero     # 主页 + styles/ 下三套第二代
 python3 build.py                      # 第一代三套（只在 styles/ 下）
 ```
 
-首屏的「十五个作品」「15 / 4 / 6」、全部作品表都跟着数据走。想让它上大图（精选六件），
+首屏的「15 / 4 / 6」、全部作品表都跟着数据走。想让它上大图（精选六件），
 改 `zero.py` 的 `FEATURED`（长卷是 [`studio/scroll.py`](../studio/scroll.py) 的 `FEATURED`），再在 [`studio/content.py`](../studio/content.py) 的 `SHOT` 里给它定一块截图。
 文案里出现母版字体里没有的字，build 会报错，按提示带上原始字体重切一次母版。
 

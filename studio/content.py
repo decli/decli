@@ -114,8 +114,9 @@ def cn(n):
     return B.cn(n)
 
 
-HEAD_A = f"{cn(N)}个作品，"
-HEAD_B = "一行代码没写。"
+# 首屏标题：跟作品集 decli.github.io 首屏一字不差
+HEAD_A = "代码已不稀缺，"
+HEAD_B = "判断才是。"
 
 
 def code_lines(limit=200):
