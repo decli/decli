@@ -555,9 +555,13 @@ def pop(d, at):
     return cid
 
 
+# 定方向之后、立规矩之前，AI 先接手的那一步（上一版三件事是「选择方案」，这里配的是「给出几条路」）
+AI_FIRST = "写需求"
+
+
 def method(t, mobile=False):
-    title = ("方法：人出判断，AI 出产能。我只做三件事：提出问题、选择方案、验收结果；"
-             "AI 给出几条路，并完成 UI 交互设计、写代码、跑测试、修 bug、部署上线。")
+    title = ("方法：人出判断，AI 出产能。我只做三件事：定方向、立规矩、验结果；"
+             f"AI {AI_FIRST}，并完成 UI 交互设计、写代码、跑测试、修 bug、部署上线。")
     if not mobile:
         W = DW
         d = doc(W, 800, title)
@@ -601,7 +605,7 @@ def method(t, mobile=False):
             d.add("</g>")
             d.text(tx, yh - 80, name, "head", 40, t["ink"], anchor=anchor)
             d.text(tx, yh - 38, desc, "sans", 26, t["ink2"], anchor=anchor)
-        for c, x, key in [("给出几条路", AI1, "a1")] + [(c, x, f"x{k}") for k, (c, x) in enumerate(zip(C.AI_DOES, xs))]:
+        for c, x, key in [(AI_FIRST, AI1, "a1")] + [(c, x, f"x{k}") for k, (c, x) in enumerate(zip(C.AI_DOES, xs))]:
             d.add(f'<g class="{pop(d, when(p.marks[key]))}">')
             ai_node(d, t, x, ya)
             d.add("</g>")
@@ -618,7 +622,7 @@ def method(t, mobile=False):
     d.text(232, y, "AI · 产能", "sans-m", 23, t["ink3"])
     y += 96
     xh, xa = 14, 74
-    seq = [("h", 0), ("a", "给出几条路"), ("h", 1)] + [("a", c) for c in C.AI_DOES] + [("h", 2)]
+    seq = [("h", 0), ("a", AI_FIRST), ("h", 1)] + [("a", c) for c in C.AI_DOES] + [("h", 2)]
     pts, prev = [], None
     for kind, v in seq:
         if prev is not None:
@@ -1120,8 +1124,8 @@ def build(out: pathlib.Path, prefix="assets/"):
     P = lambda *a, **k: kit.picture(*a, prefix=prefix, **k)  # noqa: E731
     md = ["<!-- 由 studio/zero.py 生成，别手改。改文案改 build.py 的数据，再跑 python3 studio/build.py --home zero -->", ""]
     md.append(P("hero", f"decli — {C.HEAD_A}{C.HEAD_B}" + "".join(C.LEDE), "100%", C.SITE))
-    md += ["", P("method", "方法：人出判断，AI 出产能。我只做三件事：提出问题、选择方案、验收结果；"
-                           "其余的 —— UI 交互设计、写代码、跑测试、修 bug、部署上线 —— 全部交给 AI。", "100%")]
+    md += ["", P("method", "方法：人出判断，AI 出产能。我只做三件事：定方向、立规矩、验结果；"
+                           f"其余的 —— {AI_FIRST}、UI 交互设计、写代码、跑测试、修 bug、部署上线 —— 全部交给 AI。", "100%")]
     cl = C.BY["codeless"]
     md += ["", P("codeless", f"正在做：codeless —— {cl['desc']}", "100%", cl["link"])]
     md += ["", P("works", "03 作品", "100%")]
