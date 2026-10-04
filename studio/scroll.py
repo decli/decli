@@ -143,7 +143,9 @@ def _loc():
     src = _sibling("code/index.json")
     if src:
         data = json.loads(src.read_text())
-        slim = {"total": data["total"], "projects": {k: {"loc": v["loc"], "files": v["files"]} for k, v in data["projects"].items()}}
+        # 长卷画的是十五件作品仓库的代码；作品集首页的 total 还含清单以外的仓库（含私有），这里只取作品那部分
+        slim = {"total": sum(v["loc"] for v in data["projects"].values()),
+                "projects": {k: {"loc": v["loc"], "files": v["files"]} for k, v in data["projects"].items()}}
         cache.write_text(json.dumps(slim, ensure_ascii=False, indent=1) + "\n")
     return json.loads(cache.read_text())
 
