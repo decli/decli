@@ -555,12 +555,12 @@ def pop(d, at):
     return cid
 
 
-# 定方向之后、立规矩之前，AI 先接手的那一步（上一版三件事是「选择方案」，这里配的是「给出几条路」）
+# 定方向之后、设规则之前，AI 先接手的那一步（上一版三件事是「选择方案」，这里配的是「给出几条路」）
 AI_FIRST = "写需求"
 
 
 def method(t, mobile=False):
-    title = ("方法：人出判断，AI 出产能。我只做三件事：定方向、立规矩、验结果；"
+    title = ("方法：人出判断，AI 出产能。我只做三件事：定方向、设规则、验结果；"
              f"AI {AI_FIRST}，并完成 UI 交互设计、写代码、跑测试、修 bug、部署上线。")
     if not mobile:
         W = DW
@@ -1124,7 +1124,7 @@ def build(out: pathlib.Path, prefix="assets/"):
     P = lambda *a, **k: kit.picture(*a, prefix=prefix, **k)  # noqa: E731
     md = ["<!-- 由 studio/zero.py 生成，别手改。改文案改 build.py 的数据，再跑 python3 studio/build.py --home zero -->", ""]
     md.append(P("hero", f"decli — {C.HEAD_A}{C.HEAD_B}" + "".join(C.LEDE), "100%", C.SITE))
-    md += ["", P("method", "方法：人出判断，AI 出产能。我只做三件事：定方向、立规矩、验结果；"
+    md += ["", P("method", "方法：人出判断，AI 出产能。我只做三件事：定方向、设规则、验结果；"
                            f"其余的 —— {AI_FIRST}、UI 交互设计、写代码、跑测试、修 bug、部署上线 —— 全部交给 AI。", "100%")]
     cl = C.BY["codeless"]
     md += ["", P("codeless", f"正在做：codeless —— {cl['desc']}", "100%", cl["link"])]
