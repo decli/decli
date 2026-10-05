@@ -483,7 +483,7 @@ def ai_pill(d, x, y, h, size):
 
 
 def method(t, mobile=False):
-    title = "方法：我只做三件事 —— 定方向、设规则、验结果；UI 交互设计、写代码、跑测试、修 bug、部署上线，全部交给 AI。"
+    title = f"方法：我只做三件事 —— 定方向、设规则、验结果；{'、'.join(C.AI_DOES)}，全部交给 AI 执行。"
     if not mobile:
         W = DW
         d = doc(W, 900, title)
@@ -812,7 +812,7 @@ def index_row(w, t, mobile=False, last=False):
 # ═══════════════════════════════════════════════════════════════════
 
 def beliefs(t, mobile=False):
-    items = C.PRINCIPLES[1:]          # 第一条「人出判断，AI 出产能」整页都在讲，这里只留另外两条
+    items = C.PRINCIPLES[1:]          # 第一条「人出判断，AI 执行」整页都在讲，这里只留另外两条
     title = "我相信的两件事：" + "".join(h + b for h, b in items)
     if not mobile:
         W = DW
@@ -928,7 +928,7 @@ def build(out: pathlib.Path, prefix="assets/"):
     Pc = lambda *a, **k: kit.picture(*a, prefix=prefix, **k)  # noqa: E731
     md = ["<!-- 由 studio/aurora_pro.py 生成，别手改。改文案改 build.py 的数据，再跑 python3 studio/build.py -->", ""]
     md.append(Pc("hero", f"decli — {C.HEAD_A}{C.HEAD_B}" + "".join(C.LEDE), "100%", C.SITE))
-    md += ["", Pc("method", "我只做三件事：定方向、设规则、验结果。UI 交互设计、写代码、跑测试、修 bug、部署上线，全部交给 AI。", "100%")]
+    md += ["", Pc("method", f"我只做三件事：定方向、设规则、验结果。{'、'.join(C.AI_DOES)}，全部交给 AI 执行。", "100%")]
     cl = C.BY["codeless"]
     md += ["", Pc("codeless", f"正在做：codeless —— {cl['desc']}", "100%", cl["link"])]
     md += ["", Pc("works", "03 作品", "100%")]

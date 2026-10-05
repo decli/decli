@@ -8,7 +8,7 @@
 | [长卷](scroll/) | [零 · 灰与橙](zero/) | [极光 Pro](aurora-pro/) |
 | --- | --- | --- |
 | <a href="scroll/"><img alt="长卷" src="scroll/assets/hero-d-light.svg" width="100%"></a> | <a href="zero/"><img alt="零 · 灰与橙" src="zero/assets/hero-d-light.svg" width="100%"></a> | <a href="aurora-pro/"><img alt="极光 Pro" src="aurora-pro/assets/hero-d-dark.svg" width="100%"></a> |
-| 一卷从右往左看的山水：山是 AI 写下的代码，近山就是画出那张截图的源文件；卷上的朱印是我盖的 | 灰色的代码是 AI 的产能，橙色是我的判断。首屏是 codeless 里 AI 写的真代码，按整字挖出一个「0」 | 作品集同一套品牌，工艺拉满。首屏一整片夜空，分隔线过了文字升起来变成极光的底边 |
+| 一卷从右往左看的山水：山是 AI 写下的代码，近山就是画出那张截图的源文件；卷上的朱印是我盖的 | 灰色的代码是 AI 的产出，橙色是我的判断。首屏是 codeless 里 AI 写的真代码，按整字挖出一个「0」 | 作品集同一套品牌，工艺拉满。首屏一整片夜空，分隔线过了文字升起来变成极光的底边 |
 
 三套用同一份数据、同一批真截图，桌面 / 手机 × 亮 / 暗各排一版。生成器和排版规矩在 [`studio/`](../studio/)，
 换主页就一行：`python3 studio/build.py --home zero`（或 `--home scroll`、`--home aurora-pro`），README 和图生成到仓库根目录。

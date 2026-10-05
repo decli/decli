@@ -667,7 +667,7 @@ def shot_uri(rel, width, crop=None, quality=74, redact=(), stack=None, tone=None
     """rel 形如 'ftms/dashboard'。按需打码、裁切、拼接、调色，缩到 width 像素宽，缓存在 studio/shots/ 下。
     redact = [(x0, y0, x1, y1), ...] 按原图比例的框，马赛克掉；
     stack  = [(y0, y1), ...] 只要原图里的这几条横带，上下拼起来（跳过不想露出来的行）；
-    tone   = (暗部色, 亮部色) —— 去色后映射到这两个颜色之间（「灰色是 AI 的产能」那套用）。"""
+    tone   = (暗部色, 亮部色) —— 去色后映射到这两个颜色之间（「灰色是 AI 的产出」那套用）。"""
     from PIL import Image, ImageOps
     tag = hashlib.md5(f"{rel}|{width}|{crop}|{quality}|{redact}|{stack}|{tone}|{aspect}".encode()).hexdigest()[:8]
     out = SHOT_CACHE / f"{rel.replace('/', '-')}-{width}-{tag}.webp"

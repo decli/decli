@@ -2,7 +2,7 @@
 studio/zero.py —— 方向 A「零 · 灰与橙」。
 
 整页只有一条配色规则，版权页里也写明了：
-    灰色的代码，是 AI 的产能；橙色，是我的判断。
+    灰色的代码，是 AI 的产出；橙色，是我的判断。
 橙色只用在四样东西上：那个 0、0 里那个从不打字的光标、「三件事」、我说的那一句话。
 等宽字体也只给 AI 的产出用（代码、日志、调用次数）；其余的标签一律用无衬线。
 
@@ -140,7 +140,7 @@ STR = re.compile(r"(\"[^\"]*\"|'[^']*')")
 
 
 def code_rows(cols, n):
-    """把真代码一行行接起来，铺成一面满满的墙：一屏的产能，看不清也不必看清。"""
+    """把真代码一行行接起来，铺成一面满满的墙：一屏的产出，看不清也不必看清。"""
     stream = "  ".join(ln.strip() for ln in C.code_lines(400))
     rows, i = [], 0
     while len(rows) < n:
@@ -330,7 +330,7 @@ def hero(t, mobile=False):
     cap1 = [("图 0", "sans-m", t["ink3"]), ("  我手写的代码", "sans", t["ink"])]
     kinds = len({w["cat_zh"] for w in C.WORKS})
     stats = [(str(C.N), "个作品", "works"), (str(C.LIVE), "个可在线体验", "live"), (str(kinds), "种形态", "kinds")]
-    kick = [("人出判断", "sans-m", t["ink"], 0.04), ("  ·  AI 出产能", "sans-m", t["ink3"], 0.04)]
+    kick = [("人出判断", "sans-m", t["ink"], 0.04), ("  ·  AI 执行", "sans-m", t["ink3"], 0.04)]
     if not mobile:
         W, H = DW, 1000
         d = doc(W, H + PB + 12, title)
@@ -555,13 +555,11 @@ def pop(d, at):
     return cid
 
 
-# 定方向之后、设规则之前，AI 先接手的那一步（上一版三件事是「选择方案」，这里配的是「给出几条路」）
-AI_FIRST = "写需求"
-
-
 def method(t, mobile=False):
-    title = ("方法：人出判断，AI 出产能。我只做三件事：定方向、设规则、验结果；"
-             f"AI {AI_FIRST}，并完成 UI 交互设计、写代码、跑测试、修 bug、部署上线。")
+    # AI 的第一步（写需求）落在定方向和设规则之间，其余几步排在设规则和验结果之间
+    first, run = C.AI_DOES[0], C.AI_DOES[1:]
+    title = ("方法：人出判断，AI 执行。我只做三件事：定方向、设规则、验结果；"
+             f"流程一步不少，{'、'.join(C.AI_DOES)}全部由 AI 执行。")
     if not mobile:
         W = DW
         d = doc(W, 800, title)
@@ -574,13 +572,13 @@ def method(t, mobile=False):
         d.text(G, yh - 2, "判断", "sans-m", 26, t["ink2"])
         label(d, G, yh + 30, "judgment", t["ink3"], 20)
         d.text(0, ya + 16, "AI", "disp", 52, t["ink3"])
-        d.text(G, ya - 2, "产能", "sans-m", 26, t["ink3"])
-        label(d, G, ya + 30, "output", t["ink3"], 20)
+        d.text(G, ya - 2, "执行", "sans-m", 26, t["ink3"])
+        label(d, G, ya + 30, "execution", t["ink3"], 20)
         # 四次人 ↔ AI 的换道一样长（165），AI 的五步等距（130）
         A, AI1, B = 382, 547, 712
         size = 25
-        # AI 的五步：字和字之间的空一样大（不是点和点等距 ——「UI 交互设计」比「写代码」长一倍）
-        lw = [d.width(c, "sans", size) for c in C.AI_DOES]
+        # AI 后面几步：字和字之间的空一样大（不是点和点等距 ——「UI 交互设计」比「写代码」长一倍）
+        lw = [d.width(c, "sans", size) for c in run]
         span0, span1 = 877 - lw[0] / 2, 1397 + lw[-1] / 2
         g_ = (span1 - span0 - sum(lw)) / (len(lw) - 1)
         xs, xx = [], span0
@@ -605,7 +603,7 @@ def method(t, mobile=False):
             d.add("</g>")
             d.text(tx, yh - 80, name, "head", 40, t["ink"], anchor=anchor)
             d.text(tx, yh - 38, desc, "sans", 26, t["ink2"], anchor=anchor)
-        for c, x, key in [(AI_FIRST, AI1, "a1")] + [(c, x, f"x{k}") for k, (c, x) in enumerate(zip(C.AI_DOES, xs))]:
+        for c, x, key in [(first, AI1, "a1")] + [(c, x, f"x{k}") for k, (c, x) in enumerate(zip(run, xs))]:
             d.add(f'<g class="{pop(d, when(p.marks[key]))}">')
             ai_node(d, t, x, ya)
             d.add("</g>")
@@ -619,10 +617,10 @@ def method(t, mobile=False):
     human_node(d, t, 14, y - 8, 6)
     d.text(36, y, "人 · 判断", "sans-m", 23, t["ink2"])
     ai_node(d, t, 214, y - 8, 9)
-    d.text(232, y, "AI · 产能", "sans-m", 23, t["ink3"])
+    d.text(232, y, "AI · 执行", "sans-m", 23, t["ink3"])
     y += 96
     xh, xa = 14, 74
-    seq = [("h", 0), ("a", AI_FIRST), ("h", 1)] + [("a", c) for c in C.AI_DOES] + [("h", 2)]
+    seq = [("h", 0), ("a", first), ("h", 1)] + [("a", c) for c in run] + [("h", 2)]
     pts, prev = [], None
     for kind, v in seq:
         if prev is not None:
@@ -880,7 +878,7 @@ def cover(d, t, x, y, w, h, slug, clip=None, fade_to=None, mobile=False):
 
 def plate(w, t, i, mobile=False, last=False):
     """一件作品一张：桌面左右交替（图在左 / 图在右），手机上图在上、字在下。
-    截图去色 —— 那是 AI 的产能，按本页的规矩是灰的；每张卡上唯一的橙色，是我给这件作品下的那一句定义：它替谁解决什么。"""
+    截图去色 —— 那是 AI 的产出，按本页的规矩是灰的；每张卡上唯一的橙色，是我给这件作品下的那一句定义：它替谁解决什么。"""
     title = C.alt_work(w)
     kind, where = link_label(w)
     meta = f"{w['cat_zh']} · {w['for_']}"
@@ -990,7 +988,7 @@ def index_row(w, t, mobile=False, last=False):
 # ═══════════════════════════════════════════════════════════════════
 
 def beliefs(t, mobile=False):
-    # 第一条「人出判断，AI 出产能」整页都在讲，这里只留另外两条
+    # 第一条「人出判断，AI 执行」整页都在讲，这里只留另外两条
     items = C.PRINCIPLES[1:]
     title = "我相信的两件事：" + "".join(h + b for h, b in items)
     nums = ["i.", "ii.", "iii."]
@@ -1031,12 +1029,12 @@ def beliefs(t, mobile=False):
 # ═══════════════════════════════════════════════════════════════════
 
 def colophon(t, mobile=False):
-    title = ("版权页：灰色的代码，是 AI 的产能；橙色，是我的判断。这一页也一样 —— 版式、配色、动效和生成它的代码都是 AI 写的，"
+    title = ("版权页：灰色的代码，是 AI 的产出；橙色，是我的判断。这一页也一样 —— 版式、配色、动效和生成它的代码都是 AI 写的，"
              "我只选了方向、验了收。作品集：decli.github.io")
-    rule_txt = [("灰色的代码，", "head", t["ink3"]), ("是 AI 的产能；", "head", t["ink"]), ("橙色，", "head", t["org"]),
+    rule_txt = [("灰色的代码，", "head", t["ink3"]), ("是 AI 的产出；", "head", t["ink"]), ("橙色，", "head", t["org"]),
                 ("是我的判断。", "head", t["ink"])]
     where = "页面上的橙色只标我做的判断：那个 0 和 0 里的光标、三个判断点、我对 codeless 说的那句话、每件精选作品替谁解决什么。"
-    note = "截图也是 AI 的产能，所以一律去了色。这一页本身也一样：版式、配色、动效和生成它的代码，都是 AI 写的；我只选了方向、验了收。"
+    note = "截图也是 AI 的产出，所以一律去了色。这一页本身也一样：版式、配色、动效和生成它的代码，都是 AI 写的；我只选了方向、验了收。"
     fonts = "字体：Instrument Serif、Geist、思源宋体、思源黑体（SIL OFL 1.1，按页切字嵌入）"
     if not mobile:
         W, H = DW, 640
@@ -1124,8 +1122,8 @@ def build(out: pathlib.Path, prefix="assets/"):
     P = lambda *a, **k: kit.picture(*a, prefix=prefix, **k)  # noqa: E731
     md = ["<!-- 由 studio/zero.py 生成，别手改。改文案改 build.py 的数据，再跑 python3 studio/build.py --home zero -->", ""]
     md.append(P("hero", f"decli — {C.HEAD_A}{C.HEAD_B}" + "".join(C.LEDE), "100%", C.SITE))
-    md += ["", P("method", "方法：人出判断，AI 出产能。我只做三件事：定方向、设规则、验结果；"
-                           f"其余的 —— {AI_FIRST}、UI 交互设计、写代码、跑测试、修 bug、部署上线 —— 全部交给 AI。", "100%")]
+    md += ["", P("method", "方法：人出判断，AI 执行。我只做三件事：定方向、设规则、验结果；"
+                           f"其余的 —— {'、'.join(C.AI_DOES)} —— 流程一步不少，全部由 AI 执行。", "100%")]
     cl = C.BY["codeless"]
     md += ["", P("codeless", f"正在做：codeless —— {cl['desc']}", "100%", cl["link"])]
     md += ["", P("works", "03 作品", "100%")]
@@ -1133,7 +1131,7 @@ def build(out: pathlib.Path, prefix="assets/"):
     md += ["", P("index", f"04 全部 {C.N} 个作品", "100%")]
     md += ["", "<p>" + "".join(P(f"row-{s}", C.alt_work(C.BY[s]), "100%", C.BY[s]["link"]) for s in ORDER) + "</p>"]
     md += ["", P("beliefs", "我相信的两件事：" + " ".join(h + b for h, b in C.PRINCIPLES[1:]), "100%")]
-    md += ["", P("colophon", "版权页：灰色的代码是 AI 的产能，橙色是我的判断。作品集 decli.github.io", "100%", C.SITE), ""]
+    md += ["", P("colophon", "版权页：灰色的代码是 AI 的产出，橙色是我的判断。作品集 decli.github.io", "100%", C.SITE), ""]
     (out / "README.md").write_text("\n".join(md))
     tot = {}
     for k, v in sizes.items():
