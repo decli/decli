@@ -20,7 +20,7 @@ _spec = importlib.util.spec_from_file_location("legacy_build", ROOT / "build.py"
 B = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(B)
 
-SITE, GH = B.SITE, B.GH
+SITE, GH, EMAIL = B.SITE, B.GH, B.EMAIL
 CATS = dict(B.CATS)
 POC = B.POC
 PRINCIPLES = [(h, b.replace(" —— ", "——")) for h, b in B.PRINCIPLES]

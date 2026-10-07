@@ -1093,7 +1093,7 @@ def beliefs(t, mobile=False):
 
 def colophon(t, mobile=False):
     title = ("版权页：灰色的代码，是 AI 的产出；橙色，是我的判断。这一页也一样 —— 版式、配色、动效和生成它的代码都是 AI 写的，"
-             "我只选了方向、验了收。作品集：decli.github.io")
+             f"我只选了方向、验了收。作品集：decli.github.io；联系方式：{C.EMAIL}")
     rule_txt = [("灰色的代码，", "head", t["ink3"]), ("是 AI 的产出；", "head", t["ink"]), ("橙色，", "head", t["org"]),
                 ("是我的判断。", "head", t["ink"])]
     where = "页面上的橙色只标我做的判断：那个 0 和 0 里的光标、三个判断点、我对 codeless 说的那句话、每件精选作品替谁解决什么。"
@@ -1116,8 +1116,11 @@ def colophon(t, mobile=False):
         rule(d, G, H - 118, 1300, t)
         wn = d.text(G, H - 56, "decli", "disp-it", 54, t["ink"])
         label(d, G + wn + 22, H - 60, f"© 2026 · {C.ROLE}", t["ink3"], 21)
-        label(d, 1300 - 34, H - 60, "作品集 decli.github.io", t["ink"], 23, anchor="end")
+        sw = label(d, 1300 - 34, H - 60, "作品集 decli.github.io", t["ink"], 23, anchor="end")
         arrow_ne(d, 1300 - 17, H - 61, 15, t["ink"], 2.2)
+        # 联系方式跟作品集链接并排，同一种标签字；图片里的字点不了，所以 README 的替代文字里也写了一遍
+        d.spans(1300 - 34 - sw - 56, H - 60, [("联系方式：", "sans-m", t["ink3"], 0.02),
+                                              (C.EMAIL.upper(), "sans-m", t["ink"], 0.12)], 23, anchor="end")
         return d
     W = MW
     d = doc(W, 2000, title)
@@ -1139,6 +1142,8 @@ def colophon(t, mobile=False):
     arrow_ne(d, W - X - 16, y - 7, 13, t["ink"], 2)
     y += 48
     label(d, X, y, f"© 2026 · {C.ROLE}", t["ink3"], 21)
+    y += 40
+    d.spans(X, y, [("联系方式：", "sans-m", t["ink3"], 0.02), (C.EMAIL.upper(), "sans-m", t["ink"], 0.12)], 21)
     H = y + 46
     d.h = H
     cid = d.uid("cc")
@@ -1196,7 +1201,7 @@ def build(out: pathlib.Path, prefix="assets/"):
     md += ["", P("index", f"04 全部 {C.N} 个作品", "100%")]
     md += ["", "<p>" + "".join(P(f"row-{s}", C.alt_work(C.BY[s]), "100%", C.BY[s]["link"]) for s in ORDER) + "</p>"]
     md += ["", P("beliefs", "我相信的两件事：" + " ".join(h + b for h, b in C.PRINCIPLES[1:]), "100%")]
-    md += ["", P("colophon", "版权页：灰色的代码是 AI 的产出，橙色是我的判断。作品集 decli.github.io", "100%", C.SITE), ""]
+    md += ["", P("colophon", f"版权页：灰色的代码是 AI 的产出，橙色是我的判断。作品集 decli.github.io；联系方式：{C.EMAIL}", "100%", C.SITE), ""]
     (out / "README.md").write_text("\n".join(md))
     tot = {}
     for k, v in sizes.items():
