@@ -43,7 +43,7 @@ ROOT = pathlib.Path(__file__).resolve().parent
 HOME_STYLE = None  # 主页由 studio/build.py 生成（零 · 灰与橙）；第一代的 aurora / terminal / bento 都只放 styles/ 下
 SITE = "https://decli.github.io"
 GH = "https://github.com/decli"
-EMAIL = "decli@qq.com"   # 版权页上的联系方式；作品集页脚是同一个
+EMAIL = "cu07167@gmail.com"   # 版权页上的联系方式；作品集页脚是同一个
 
 SANS = (
     "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', "

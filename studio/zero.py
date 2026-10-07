@@ -1100,7 +1100,8 @@ def colophon(t, mobile=False):
     note = "截图也是 AI 的产出，所以一律去了色。这一页本身也一样：版式、配色、动效和生成它的代码，都是 AI 写的；我只选了方向、验了收。"
     fonts = "字体：Instrument Serif、Geist、思源宋体、思源黑体（SIL OFL 1.1，按页切字嵌入）"
     if not mobile:
-        W, H = DW, 640
+        W, Hb = DW, 640
+        H = Hb + 44                      # 底下多一行联系方式
         d = doc(W, H, title)
         d.add(f'<rect width="{W}" height="{H}" rx="16" fill="{t["plate"]}"/>')
         cid = d.uid("cc")
@@ -1113,14 +1114,15 @@ def colophon(t, mobile=False):
         y = lines(d, G, 292, where, "sans", 29, t["ink2"], 1150, 48, justify=False)
         y = lines(d, G, y + 48, note, "sans", 29, t["ink2"], 1150, 48, justify=False)
         d.text(G, y + 66, fonts, "sans", 24, t["ink3"])
-        rule(d, G, H - 118, 1300, t)
-        wn = d.text(G, H - 56, "decli", "disp-it", 54, t["ink"])
-        label(d, G + wn + 22, H - 60, f"© 2026 · {C.ROLE}", t["ink3"], 21)
-        sw = label(d, 1300 - 34, H - 60, "作品集 decli.github.io", t["ink"], 23, anchor="end")
-        arrow_ne(d, 1300 - 17, H - 61, 15, t["ink"], 2.2)
-        # 联系方式跟作品集链接并排，同一种标签字；图片里的字点不了，所以 README 的替代文字里也写了一遍
-        d.spans(1300 - 34 - sw - 56, H - 60, [("联系方式：", "sans-m", t["ink3"], 0.02),
-                                              (C.EMAIL.upper(), "sans-m", t["ink"], 0.12)], 23, anchor="end")
+        rule(d, G, Hb - 118, 1300, t)
+        wn = d.text(G, Hb - 56, "decli", "disp-it", 54, t["ink"])
+        label(d, G + wn + 22, Hb - 60, f"© 2026 · {C.ROLE}", t["ink3"], 21)
+        label(d, 1300 - 34, Hb - 60, "作品集 decli.github.io", t["ink"], 23, anchor="end")
+        arrow_ne(d, 1300 - 17, Hb - 61, 15, t["ink"], 2.2)
+        # 联系方式单起一行，跟 © 左对齐（手机上也是这么排的）；跟作品集并排的话，邮箱一长就顶到 © 了。
+        # 图片里的字点不了也复制不了，所以 README 的替代文字里也写了一遍
+        d.spans(G + wn + 22, Hb - 16, [("联系方式：", "sans-m", t["ink3"], 0.02),
+                                       (C.EMAIL.upper(), "sans-m", t["ink"], 0.12)], 21)
         return d
     W = MW
     d = doc(W, 2000, title)
