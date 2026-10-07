@@ -428,6 +428,69 @@ def hero(t, mobile=False):
 
 
 # ═══════════════════════════════════════════════════════════════════
+#  履历：首屏下面的一小段，回答「这些判断是谁做的、凭什么」
+#  不编号、不占一章：首屏是标题和导语，这一段是署名；01 起的章节照旧
+#  一条时间线 —— 前四家挤在左边，「现在」那家单独隔开、实心点；
+#  下面两栏正好分在「过去」和「现在」底下。没有橙色：橙色只标判断，履历不是判断
+# ═══════════════════════════════════════════════════════════════════
+
+def about(t, mobile=False):
+    title = "履历：" + C.BIO
+    past, now = C.CAREER[:-1], C.CAREER[-1]
+    if not mobile:
+        W = DW
+        d = doc(W, 600, title)
+        rule(d, 0, 1, W, t)
+        d.text(G, 92, "判断从哪来", "head", 44, t["ink"], halt=True)
+        label(d, W, 92, "background", t["ink3"], 23, anchor="end")
+        yt = 196                                   # 时间线
+        xn = G + 0.56 * (W - G)                    # 「现在」那个点；右栏也从这里起
+        step = (xn - G - 260) / (len(past) - 1)       # 前四家挤一挤，跟「现在」之间空出一段
+        xs = [G + i * step for i in range(len(past))]
+        d.add(f'<path d="M{G} {yt}H{num(xn)}" stroke="{t["rule"]}" stroke-opacity=".30" stroke-width="2"/>')
+        d.add(f'<path d="M{num(xn)} {yt}H{W}" stroke="{t["rule"]}" stroke-opacity=".22" stroke-width="2" stroke-dasharray="2 9"/>')
+        for i, (x, name) in enumerate(zip(xs, past)):
+            d.add(f'<circle cx="{num(x)}" cy="{yt}" r="6" fill="{t["ink3"]}"/>')
+            d.text(x - 2, yt + 52, name, "sans-m", 28, t["ink2"], cls="up", extra=delay(0.2 + i * 0.08))
+        d.add(f'<circle cx="{num(xn)}" cy="{yt}" r="19" fill="none" stroke="{t["ink"]}" stroke-opacity=".22" stroke-width="2"/>'
+              f'<circle cx="{num(xn)}" cy="{yt}" r="9" fill="{t["ink"]}"/>')
+        label(d, xn - 2, yt - 38, "现在 · now", t["ink3"], 20)
+        d.text(xn - 2, yt + 52, now, "sans-m", 28, t["ink"], cls="up", extra=delay(0.52))
+        yh = yt + 150
+        colL = xn - G - 72
+        for x, (head, body), w_, dl in ((G, C.CAREER_PAST, colL, 0.6), (xn, C.CAREER_NOW, W - xn, 0.7)):
+            d.text(x - 2, yh, head, "head", 36, t["ink"], cls="up", extra=delay(dl), halt=True)
+            yb = lines(d, x, yh + 56, body, "sans", 28, t["ink2"], w_, 46, justify=False, cls="up", start=dl + 0.06)
+        d.h = max(yb, yh + 56 + 46) + PB + 10
+        return d
+    W = MW
+    d = doc(W, 2000, title)
+    rule(d, 0, 1, W, t)
+    d.text(0, 80, "判断从哪来", "head", 40, t["ink"], halt=True)
+    label(d, W, 80, "background", t["ink3"], 20, anchor="end")
+    yt = 176
+    xn = W - 110
+    step = (xn - 170) / (len(past) - 1)
+    xs = [i * step + 7 for i in range(len(past))]
+    d.add(f'<path d="M7 {yt}H{num(xn)}" stroke="{t["rule"]}" stroke-opacity=".30" stroke-width="2"/>')
+    d.add(f'<path d="M{num(xn)} {yt}H{W}" stroke="{t["rule"]}" stroke-opacity=".22" stroke-width="2" stroke-dasharray="2 8"/>')
+    for x, name in zip(xs, past):
+        d.add(f'<circle cx="{num(x)}" cy="{yt}" r="5" fill="{t["ink3"]}"/>')
+        d.text(x - 6, yt + 46, name, "sans-m", 24, t["ink2"])
+    d.add(f'<circle cx="{num(xn)}" cy="{yt}" r="16" fill="none" stroke="{t["ink"]}" stroke-opacity=".22" stroke-width="2"/>'
+          f'<circle cx="{num(xn)}" cy="{yt}" r="8" fill="{t["ink"]}"/>')
+    label(d, xn - 6, yt - 32, "现在", t["ink3"], 19)
+    d.text(xn - 6, yt + 46, now, "sans-m", 24, t["ink"])
+    y = yt + 136
+    for k, (head, body) in enumerate((C.CAREER_NOW, C.CAREER_PAST)):   # 手机上先说现在
+        d.text(0, y, head, "head", 32, t["ink"], halt=True)
+        y = lines(d, 0, y + 50, body, "sans", 26, t["ink2"], W, 42, justify=False)
+        y += 76
+    d.h = y - 76 + PBM + 10
+    return d
+
+
+# ═══════════════════════════════════════════════════════════════════
 #  段落标题
 # ═══════════════════════════════════════════════════════════════════
 
@@ -1107,6 +1170,7 @@ def build(out: pathlib.Path, prefix="assets/"):
                 sizes[f"{name}-{dev}-{mode}"] = kit.write(assets, f"{name}-{dev}-{mode}", svg)
 
     emit("hero", hero)
+    emit("about", about)
     emit("method", method)
     emit("codeless", codeless)
     emit("works", lambda t, mobile: head_only(t, "03", "作品", f"selected · {len(FEATURED)} / {C.N}", mobile=mobile))
@@ -1122,6 +1186,7 @@ def build(out: pathlib.Path, prefix="assets/"):
     P = lambda *a, **k: kit.picture(*a, prefix=prefix, **k)  # noqa: E731
     md = ["<!-- 由 studio/zero.py 生成，别手改。改文案改 build.py 的数据，再跑 python3 studio/build.py --home zero -->", ""]
     md.append(P("hero", f"decli — {C.HEAD_A}{C.HEAD_B}" + "".join(C.LEDE), "100%", C.SITE))
+    md += ["", P("about", "履历：" + C.BIO, "100%")]
     md += ["", P("method", "方法：人出判断，AI 执行。我只做三件事：定方向、设规则、验结果；"
                            f"其余的 —— {'、'.join(C.AI_DOES)} —— 流程一步不少，全部由 AI 执行。", "100%")]
     cl = C.BY["codeless"]

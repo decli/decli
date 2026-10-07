@@ -1,17 +1,5 @@
-# logicc/index.html  (从第 551 行起，只留纯 ASCII 的行)
+# logicc/index.html  (从第 627 行起，只留纯 ASCII 的行)
 const GAMES = [
-  {
-    levels: [
-    ]
-  },
-  {
-    levels: [
-    ]
-  },
-  {
-    levels: [
-    ]
-  },
   {
     levels: [
     ]
@@ -46,6 +34,17 @@ const GAMES = [
   {
     levels: [
     ]
+  },
+  {
+    levels: [
+    ]
+  },
+  {
+    levels: []
+  },
+  {
+    levels: [
+    ]
   }
 ];
 const G = {}; GAMES.forEach(g => { G[g.id] = g; S.level[g.id] = 1; S.streak[g.id] = 0; });
@@ -57,4 +56,8 @@ function sparkle(x, y, chars) {
     s.style.setProperty('--dx', px(Math.cos(a) * d)); s.style.setProperty('--dy', px(Math.sin(a) * d));
     fx.appendChild(s); setTimeout(() => s.remove(), 950);
   }
+}
+function toast(t) {
+  const n = el('div', null, t);
+  $('#screen').appendChild(n); setTimeout(() => n.remove(), 1700);
 }

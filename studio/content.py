@@ -27,6 +27,7 @@ PRINCIPLES = [(h, b.replace(" —— ", "——")) for h, b in B.PRINCIPLES]
 LEDE = [x.replace(" —— ", "——") for x in B.LEDE]
 STEPS = B.STEPS
 AI_DOES = B.AI_DOES
+CAREER, CAREER_PAST, CAREER_NOW, BIO = B.CAREER, B.CAREER_PAST, B.CAREER_NOW, B.BIO
 ICONS = B.ICONS
 ROLE = "AI Architect"
 # 旧主页写的「San Jose」跟作品集对不上（作品集里没有这个地名，倒是 IP 插件截图里的代理出口是 San Jose），
