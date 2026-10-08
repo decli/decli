@@ -100,6 +100,15 @@ WORKS = [
         brief="把做不下去的纸质练习册，改成十二个会读题的平板游戏。",
         tags=["幼儿", "思维训练", "12 个游戏", "语音读题"],
     ),
+    # private：仓库在客户签约前是私有的 —— 不出「源码」链接（点了只会是 404），在线地址和截图照常
+    dict(
+        slug="ctne", cat="web", name="储能 PACK 线官网", repo="ctne", href="https://ctne.cu07167.workers.dev/",
+        private=True, icon="@ctne.svg", tint=("#0e2a47", "#3fbf6f"),
+        desc="让储能装备厂商把一份 19 页的产线方案书，变成海外买家一看就懂的中英双语官网："
+             "沿 55 米产线滚动的 3D 参观、产能与厂房估算、30 秒宣传片，SEO / GEO 一并做好。",
+        brief="把 19 页产线方案书，做成能沿 55 米产线滚动参观的 3D 官网。",
+        tags=["Three.js", "中英双语", "SEO / GEO", "宣传片"],
+    ),
     dict(
         slug="wxformat3", cat="web", name="WxMark", repo="wxformat3", href=f"{SITE}/wxformat3/",
         icon="@wxformat3.svg", tint=("#667eea", "#764ba2"),
@@ -1147,7 +1156,8 @@ def works_table():
                 links.append(f"[在线]({w['href']})")
             if w.get("dl"):
                 links.append(f"[下载]({w['dl']})")
-            links.append(f"[源码]({GH}/{w['repo']})")
+            if not w.get("private"):
+                links.append(f"[源码]({GH}/{w['repo']})")
             rows.append(f"| **{w['name']}**<br><sub>{label}</sub> | {w['brief']} | {' · '.join(links)} |")
     return "\n".join(rows)
 

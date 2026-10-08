@@ -146,6 +146,10 @@ class Stack:
                 return f
         if ch.strip() == "":
             return face(self.keys[0])
+        # 母版只含用过的字：新文案里的生字落到这里，图上会变成豆腐块或系统字体 —— 停下来，提示重切母版
+        if any(face(k).from_master for k in self.keys):
+            sys.exit(f"字体母版里没有「{ch}」（{' / '.join(self.keys)}）。带上原始字体重切一次："
+                     "FONTSRC=<原始字体目录> python3 studio/build.py --home zero --masters（中文字体见 studio/README.md）")
         # 原始字体里都没有这个字：落到最后一个
         return face(self.keys[-1])
 
@@ -254,7 +258,8 @@ def _kind(tok):
 
 
 PROTECT = ["那个 0 和 0 里的光标", "我对 codeless 说的那句话", "版式、配色、动效", "能直接粘贴", "AI Native 时代", "AI Agent", "Docker + CI", "IPv4 / IPv6 与归属地", "GitHub Releases", "UI 交互设计", "修 bug",
-           "Chrome 扩展", "一键复制", "到退税", "全部交给 AI", "全部由 AI 完成"]
+           "Chrome 扩展", "一键复制", "到退税", "全部交给 AI", "全部由 AI 完成",
+           "19 页", "55 米", "30 秒", "SEO / GEO"]   # 数字跟单位不分行
 
 
 PARTICLE = "的了么呢吗吧着过地得"

@@ -38,9 +38,10 @@ python3 studio/build.py --home zero     # 主页 + styles/ 下三套第二代
 python3 build.py                      # 第一代三套（只在 styles/ 下）
 ```
 
-首屏的「15 / 4 / 6」、全部作品表都跟着数据走。想让它上大图（精选六件），
+首屏的「16 / 5 / 6」、全部作品表都跟着数据走。想让它上大图（现在精选七件），
 改 `zero.py` 的 `FEATURED`（长卷是 [`studio/scroll.py`](../studio/scroll.py) 的 `FEATURED`），再在 [`studio/content.py`](../studio/content.py) 的 `SHOT` 里给它定一块截图。
-文案里出现母版字体里没有的字，build 会报错，按提示带上原始字体重切一次母版。
+文案里出现母版字体里没有的字，build 会报错，按提示带上原始字体重切一次母版（中文的思源黑体 / 宋体：Debian / Ubuntu 上 `apt install fonts-noto-cjk fonts-noto-cjk-extra`，装好就在 `kit.py` 认的路径上）。
+仓库还是私有的作品，加 `private=True`：卡片和作品表照常，只是不出「源码」链接（点了只会是 404）。
 
 ## 换一套风格
 
@@ -56,7 +57,7 @@ python3 build.py                      # 第一代三套（只在 styles/ 下）
 
 铺满一屏 codeless 仓库里 AI 写的真代码，按整字挖出一个「0」—— 只挖笔画那一圈，0 里照样是代码，
 正中一个从不打字的光标。往下是方法（人只在三个点上做判断）、codeless 的一次实测（$0.0127）、
-六件精选作品的真截图、全部十五件的索引、我相信的两件事、版权页。
+七件精选作品的真截图、全部十六件的索引、我相信的两件事、版权页。
 
 ### 长卷（在 [`styles/scroll/`](../styles/scroll/)）
 

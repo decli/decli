@@ -20,7 +20,9 @@ python3 studio/build.py --home scroll     # 换成「长卷」
 依赖：`pip install fonttools brotli pillow`。不需要联网，也不需要原始字体和作品集仓库 ——
 用到的字切好的母版在 `studio/fonts/`，截图处理好的小图在 `studio/shots/`，分词结果在 `studio/seg.json`，
 「长卷」用到的行长和代码摘录在 `studio/skyline.json`、`studio/code/`，行数就从行长表里数。
-改了文案、出现了母版里没有的字，build 会报错，提示带上原始字体重切：`FONTSRC=<目录> python3 studio/build.py --masters`。
+改了文案、出现了母版里没有的字，build 会报错，提示带上原始字体重切：`FONTSRC=<目录> python3 studio/build.py --home zero --masters`。
+`FONTSRC` 放西文原始字体（Instrument Serif、Geist、Geist Mono、马善政楷书）；中文的思源黑体 / 宋体读系统路径 `/usr/share/fonts/opentype/noto/`，
+Debian / Ubuntu 上 `apt install fonts-noto-cjk fonts-noto-cjk-extra` 就有（跟母版同一个版本）。只缺中文字时，西文不用准备 —— 没有原始字体的那几套保留旧母版。
 
 ---
 
@@ -75,7 +77,7 @@ python3 studio/build.py --home scroll     # 换成「长卷」
 （作品集仓库 `code/<slug>.json`，两个仓库并排 clone 时自动刷新 `studio/code/`）。
 
 **远山是整个仓库。** 远山的轮廓是那个仓库**全部**代码每一行的长度，八万零八十四行一行不少
-（`studio/skyline.json`，在作品集仓库里跑 `node tools/harvest.mjs --repos <放十五个仓库的目录> --skyline ../decli/studio/skyline.json` 生成）。
+（`studio/skyline.json`，在作品集仓库里跑 `node tools/harvest.mjs --repos <放各个仓库的目录> --skyline ../decli/studio/skyline.json` 生成；只加一个项目就 `--only <slug> --skyline <临时文件>`，再把那一项并进来）。
 代码的行长本身起伏不大，直接画是一块平台 —— 所以先粗抹平定山势（哪一段写得满，哪里就是主峰）、
 再细抹平定山石，按这一座山自己的最高和最低拉开。山多高跟代码量走（开平方），信风最高，TabInfoCopy 只是一块石头。
 江山图上每座山头挂一张地名签，像旧舆图那样竖写山名，挤不下就往两边让，拉一根细线指回山顶。

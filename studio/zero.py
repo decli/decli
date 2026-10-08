@@ -866,13 +866,13 @@ def codeless(t, mobile=False):
 
 
 # ═══════════════════════════════════════════════════════════════════
-#  03 作品：六件，左右交替的大图（真截图）
+#  03 作品：七件，左右交替的大图（真截图）
 # ═══════════════════════════════════════════════════════════════════
 
-ORDER = ["codeless", "ftms", "ems", "logicc", "codehelper", "chinesechess", "wxformat3", "macpleco", "ip-geo",
+ORDER = ["codeless", "ftms", "ems", "ctne", "logicc", "codehelper", "chinesechess", "wxformat3", "macpleco", "ip-geo",
          "jobornot", "wx-export", "tabinfocopy", "pagescroll", "bing-wallpaper", "ip-display"]
 NO = {s: i + 1 for i, s in enumerate(ORDER)}
-FEATURED = ["ftms", "ems", "logicc", "wxformat3", "macpleco", "ip-geo"]
+FEATURED = ["ftms", "ems", "ctne", "logicc", "wxformat3", "macpleco", "ip-geo"]
 assert sorted(ORDER) == sorted(C.BY), "ORDER 跟作品数据对不上"
 
 
@@ -958,7 +958,7 @@ def plate(w, t, i, mobile=False, last=False):
         X = sw + 80 if left else G
         tw = W - sw - 80 - G
         names = d.wrap(w["name"], "head", 56, tw)
-        quote = d.wrap(w["brief"], "quote", 32, tw, halt=True)      # 32：六句都正好两行
+        quote = d.wrap(w["brief"], "quote", 32, tw, halt=True)      # 32：七句都正好两行
         wl = link_lines(where, d, "sans", 26, tw)
         block = 36 + 34 + len(names) * 70 + 22 + len(quote) * 48 + 64 + 30 + len(wl) * 36
         y = (H - block) / 2 + 30

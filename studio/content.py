@@ -35,7 +35,7 @@ ROLE = "AI Architect"
 CITY = None
 
 EN = {
-    "codeless": "codeless", "ftms": "Tradewind", "ems": "EMS", "logicc": "Logicc", "wxformat3": "WxMark",
+    "codeless": "codeless", "ftms": "Tradewind", "ems": "EMS", "ctne": "ESS Line Site", "logicc": "Logicc", "wxformat3": "WxMark",
     "macpleco": "MacPleco", "ip-geo": "IP Geolocation", "jobornot": "JobOrNot", "wx-export": "WeChat MP Exporter",
     "tabinfocopy": "TabInfoCopy", "ip-display": "IP Display", "pagescroll": "PageScroll",
     "bing-wallpaper": "Bing Wallpaper Batch", "codehelper": "Pickup Code Helper", "chinesechess": "Chinese Chess",
@@ -45,7 +45,7 @@ CAT_EN = {"web": "Web app", "ext": "Extension", "script": "Userscript", "desktop
 # 「为谁做」—— 跟旧主页的分组同一套说法：替外贸生意干活 / 顺手的小工具 / 给身边的人做的
 FOR = {
     "codeless": "正在做",
-    "ftms": "替外贸生意", "ems": "替外贸生意",
+    "ftms": "替外贸生意", "ems": "替外贸生意", "ctne": "替装备厂商",
     "logicc": "给孩子", "codehelper": "给家里老人", "chinesechess": "给老人",
 }
 FOR_DEFAULT = "顺手的小工具"
@@ -61,6 +61,9 @@ SHOT = {
     # EMS：顶上那条「数据全部虚构」的横幅留着，跳过面包屑，到第一条待办为止；手机只要第一张指标卡
     "ems": dict(rel="ems/dashboard", crop=(0.165, 0, 0.58, 0.415), stack=[(0, 0.0312), (0.1, 0.4838)],
                 mcrop=(0.168, 0, 0.3775, 0.2095), mstack=[(0.1, 0.1391), (0.17, 0.3405)]),
+    # 储能产线官网：首屏标题、导语、两个按钮，右边带一段 3D 白模产线；上边停在导航栏下面，下边停在按钮和「示意白模」那行注之间，
+    # 右边停在 KPI 那一栏前面。手机只要标题那一块
+    "ctne": dict(rel="ctne/hero", crop=(0.025, 0.13, 0.595, 0.70), mcrop=(0.03, 0.08, 0.44, 0.49)),
     # 思维小画本：标题在原图里贴着左边，左边补一点底色；下边停在第二排卡片和第三排之间
     "logicc": dict(rel="logicc/home", crop=(-0.0221, 0, 0.4995, 0.703)),
     # WxMark：只要预览栏的正文，左右边距对称；下边停在第二条和第三条特点之间
@@ -77,7 +80,7 @@ SHOT = {
 # 显示用的分类：codeless 是自托管的服务，不是点开就能用的网页
 CAT_SHOW = {"codeless": "自托管服务"}
 
-# 精选：上大图的六个 —— 全是有真截图、点开就能用 / 能下载的
+# 精选：上大图的几个 —— 全是有真截图、点开就能用 / 能下载的（「零」自己另有一份 FEATURED）
 FEATURED = ["ftms", "ems", "logicc", "wxformat3", "macpleco", "ip-geo"]
 
 
@@ -97,7 +100,7 @@ def works():
         w["cat_zh"] = CAT_SHOW.get(w["slug"], CATS[w["cat"]])
         w["cat_en"] = CAT_EN[w["cat"]]
         w["link"] = w.get("href") or w.get("dl") or f"{GH}/{w['repo']}"
-        w["src"] = f"{GH}/{w['repo']}"
+        w["src"] = None if w.get("private") else f"{GH}/{w['repo']}"   # 私有仓库：不给一个点了是 404 的链接
         w["shot"] = SHOT.get(w["slug"])
         icon = w["icon"]
         w["icon_file"] = ROOT / "src" / "icons" / icon[1:] if icon.startswith("@") else None
@@ -147,5 +150,6 @@ def alt_work(w):
         bits.append(f"在线体验：{w['href']}")
     if w.get("dl"):
         bits.append(f"下载：{w['dl']}")
-    bits.append(f"源码：{w['src']}")
+    if w["src"]:
+        bits.append(f"源码：{w['src']}")
     return " — ".join(bits)
