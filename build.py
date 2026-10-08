@@ -102,7 +102,7 @@ WORKS = [
     ),
     # private：仓库在客户签约前是私有的 —— 不出「源码」链接（点了只会是 404），在线地址和截图照常
     dict(
-        slug="ctne", cat="web", name="储能 PACK 线官网", repo="ctne", href="https://ctne.cu07167.workers.dev/",
+        slug="ctne", cat="web", name="储能 PACK 线官网", repo="ctne", href="https://ctne.zerolineai.com/",
         private=True, icon="@ctne.svg", tint=("#0e2a47", "#3fbf6f"),
         desc="让储能装备厂商把一份 19 页的产线方案书，变成海外买家一看就懂的中英双语官网："
              "沿 55 米产线滚动的 3D 参观、产能与厂房估算、30 秒宣传片，SEO / GEO 一并做好。",
